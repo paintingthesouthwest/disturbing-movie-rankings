@@ -1,742 +1,612 @@
-<!DOCTYPE html>                                                                 
-  <html lang="en">                                                                
-  <head>                                                                          
-  <meta charset="UTF-8">                                    
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Elizabeth's Disturbing Movie Habit</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>            
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@
-  0,400;0,700;1,400&family=Lora:ital,wght@0,400;0,600;1,400&display=swap"         
-  rel="stylesheet">                                         
-  <style>                                                                         
-  *{box-sizing:border-box;margin:0;padding:0}                                     
-  body{background:#1a1a1a;color:#e8e0d0;font-family:'Lora',Georgia,serif;min-heigh
-  t:100vh;line-height:1.6}                                                        
-  h1,h2,h3,h4{font-family:'Playfair Display',Georgia,serif} 
-  a{color:#cc2200;text-decoration:none}                                           
-  a:hover{color:#ff4422}                                                          
-                                                                                  
-  #app-header{background:#111;border-bottom:2px solid                             
-  #cc2200;padding:2rem;text-align:center}                   
-  #app-header h1{font-size:2.8rem;color:#e8e0d0;letter-spacing:0.05em}            
-  #app-header h1 span{color:#cc2200;font-style:italic}                            
-  #app-header p{color:#888;font-size:1rem;margin-top:0.5rem;font-style:italic}    
-                                                                                  
-  #controls{background:#1f1f1f;border-bottom:1px solid #333;padding:1.2rem        
-  2rem;display:flex;flex-wrap:wrap;gap:1rem;align-items:center;justify-content:spa
-  ce-between}                                                                     
-  .filter-group{display:flex;flex-wrap:wrap;gap:0.5rem;align-items:center}        
-  .filter-group label{color:#999;font-size:0.85rem;margin-right:0.3rem}           
-  select,input[type="text"]{background:#2a2a2a;border:1px solid                   
-  #444;color:#e8e0d0;padding:0.4rem                         
-  0.7rem;border-radius:4px;font-family:'Lora',serif;font-size:0.9rem}             
-  select:focus,input:focus{outline:none;border-color:#cc2200}
-  button{cursor:pointer;font-family:'Lora',serif;border:none;border-radius:4px;pad
-  ding:0.5rem 1.1rem;font-size:0.9rem;transition:background 0.2s}
-  .btn-primary{background:#cc2200;color:#fff}                                     
-  .btn-primary:hover{background:#aa1a00}                    
-  .btn-secondary{background:#333;color:#ccc}                                      
-  .btn-secondary:hover{background:#444}   
-  .btn-danger{background:#550000;color:#ccc}                                      
-  .btn-danger:hover{background:#770000}                                           
-                                          
-  #stats-bar{display:flex;flex-wrap:wrap;gap:1.5rem;padding:1rem                  
-  2rem;background:#161616;border-bottom:1px solid                                 
-  #2a2a2a;font-size:0.85rem;color:#888}
-  #stats-bar span{color:#cc2200;font-weight:600}                                  
-                                                            
-  #movie-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr
-  ));gap:1.5rem;padding:2rem;max-width:1400px;margin:0 auto}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Elizabeth's Disturbing Movie Habit</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#1a1a1a;color:#e8e0d0;font-family:'Lora',Georgia,serif;min-height:100vh;line-height:1.6}
+h1,h2,h3,h4{font-family:'Playfair Display',Georgia,serif}
+a{color:#cc2200;text-decoration:none}
+a:hover{color:#ff4422}
+#app-header{background:#111;border-bottom:2px solid #cc2200;padding:2rem;text-align:center}
+#app-header h1{font-size:2.8rem;color:#e8e0d0;letter-spacing:0.05em}
+#app-header h1 span{color:#cc2200;font-style:italic}
+#app-header p{color:#888;font-size:1rem;margin-top:0.5rem;font-style:italic}
+#controls{background:#1f1f1f;border-bottom:1px solid #333;padding:1.2rem 2rem;display:flex;flex-wrap:wrap;gap:1rem;align-items:center;justify-content:space-between}
+.filter-group{display:flex;flex-wrap:wrap;gap:0.5rem;align-items:center}
+.filter-group label{color:#999;font-size:0.85rem;margin-right:0.3rem}
+select,input[type="text"]{background:#2a2a2a;border:1px solid #444;color:#e8e0d0;padding:0.4rem 0.7rem;border-radius:4px;font-family:'Lora',serif;font-size:0.9rem}
+select:focus,input:focus{outline:none;border-color:#cc2200}
+button{cursor:pointer;font-family:'Lora',serif;border:none;border-radius:4px;padding:0.5rem 1.1rem;font-size:0.9rem;transition:background 0.2s}
+.btn-primary{background:#cc2200;color:#fff}
+.btn-primary:hover{background:#aa1a00}
+.btn-secondary{background:#333;color:#ccc}
+.btn-secondary:hover{background:#444}
+.btn-danger{background:#550000;color:#ccc}
+.btn-danger:hover{background:#770000}
+#stats-bar{display:flex;flex-wrap:wrap;gap:1.5rem;padding:1rem 2rem;background:#161616;border-bottom:1px solid #2a2a2a;font-size:0.85rem;color:#888}
+#stats-bar span{color:#cc2200;font-weight:600}
+#movie-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1.5rem;padding:2rem;max-width:1400px;margin:0 auto}
+.movie-card{background:#222;border:1px solid #333;border-radius:8px;padding:1.2rem;position:relative;transition:transform 0.2s,border-color 0.2s}
+.movie-card:hover{transform:translateY(-3px);border-color:#cc2200}
+.card-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:0.6rem}
+.card-title{font-family:'Playfair Display',serif;font-size:1.25rem;color:#e8e0d0;flex:1;padding-right:0.5rem}
+.card-year{color:#888;font-size:0.85rem;white-space:nowrap}
+.card-genre{color:#cc2200;font-size:0.8rem;margin-bottom:0.5rem;text-transform:uppercase;letter-spacing:0.08em}
+.card-meta{display:flex;gap:0.8rem;margin-bottom:0.6rem;flex-wrap:wrap;align-items:center}
+.card-rating{color:#e8c84a;font-size:0.9rem}
+.card-status{font-size:0.75rem;padding:0.2rem 0.5rem;border-radius:3px;background:#333;color:#aaa}
+.card-status.watched{background:#1a3320;color:#5a9;border:1px solid #2a5535}
+.card-status.want{background:#1a2040;color:#68a;border:1px solid #2a3560}
+.card-status.skip{background:#2a2a2a;color:#777;border:1px solid #444}
+.disturb-level-display{margin:0.5rem 0;padding:0.4rem 0.6rem;border-radius:4px;font-size:1rem;font-weight:700;letter-spacing:0.03em}
+.disturb-1{background:#1a2a1a;color:#5c5;border:1px solid #2a4a2a}
+.disturb-2{background:#2a2a1a;color:#bb8;border:1px solid #4a4a2a}
+.disturb-3{background:#2a1a1a;color:#c84;border:1px solid #4a2a1a}
+.disturb-4{background:#2a1515;color:#d55;border:1px solid #5a2020}
+.disturb-5{background:#1f0808;color:#f44;border:1px solid #6a1010}
+.card-tags{display:flex;flex-wrap:wrap;gap:0.3rem;margin:0.5rem 0}
+.tag{background:#2a2020;color:#c87878;font-size:0.75rem;padding:0.15rem 0.45rem;border-radius:3px;border:1px solid #442222}
+.card-notes{color:#999;font-size:0.85rem;font-style:italic;margin-top:0.5rem;border-top:1px solid #2a2a2a;padding-top:0.5rem}
+.card-actions{display:flex;gap:0.4rem;margin-top:0.8rem}
+.card-actions button{font-size:0.75rem;padding:0.25rem 0.6rem}
+.trigger-warning{background:#1f0a0a;border:1px solid #550000;border-radius:4px;padding:0.3rem 0.6rem;margin-top:0.4rem;font-size:0.75rem;color:#c06060}
+#modal-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.85);z-index:1000;overflow-y:auto}
+#modal-overlay.open{display:flex;align-items:flex-start;justify-content:center;padding:2rem 1rem}
+#modal-box{background:#1e1e1e;border:1px solid #444;border-radius:10px;width:100%;max-width:700px;padding:2rem;margin:auto}
+#modal-box h2{font-family:'Playfair Display',serif;color:#e8e0d0;margin-bottom:1.5rem;font-size:1.8rem}
+.form-group{margin-bottom:1.2rem}
+.form-group label{display:block;color:#bbb;font-size:0.95rem;margin-bottom:0.4rem}
+.form-group input,.form-group select,.form-group textarea{width:100%;background:#2a2a2a;border:1px solid #444;color:#e8e0d0;padding:0.6rem 0.8rem;border-radius:4px;font-family:'Lora',serif;font-size:0.95rem}
+.form-group textarea{height:80px;resize:vertical}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.disturb-picker{display:flex;flex-direction:column;gap:0.4rem;margin-top:0.4rem}
+.disturb-option{display:flex;align-items:center;cursor:pointer;padding:0.35rem 0.5rem;border-radius:4px;border:2px solid transparent;transition:all 0.15s}
+.disturb-option:hover{background:#2a2020}
+.disturb-option input[type="radio"]{margin-right:0.6rem;accent-color:#cc2200}
+.disturb-option-bar{flex:1;height:28px;border-radius:4px;display:flex;align-items:center;padding:0 0.7rem;font-size:0.95rem;font-weight:600;letter-spacing:0.02em;transition:opacity 0.15s}
+.disturb-option.selected{border-color:#cc2200}
+.bar-1{background:#1a3a1a;color:#6d6}
+.bar-2{background:#2a2a1a;color:#cc8}
+.bar-3{background:#3a2010;color:#c84}
+.bar-4{background:#3a1515;color:#d55}
+.bar-5{background:#2a0808;color:#f44}
+.tag-section-title{color:#cc2200;font-size:1rem;font-weight:700;margin:0.8rem 0 0.4rem;letter-spacing:0.05em;text-transform:uppercase;font-family:'Playfair Display',serif}
+.tags-grid{display:flex;flex-wrap:wrap;gap:0.4rem;margin-bottom:0.5rem}
+.tag-checkbox{display:inline-flex;align-items:center;gap:0.3rem;background:#252525;border:1px solid #3a3a3a;border-radius:4px;padding:0.3rem 0.6rem;cursor:pointer;font-size:0.9rem;color:#ccc;transition:all 0.15s}
+.tag-checkbox:hover{border-color:#cc2200;color:#e8e0d0}
+.tag-checkbox input{accent-color:#cc2200}
+.tag-checkbox.checked{background:#2a1515;border-color:#cc2200;color:#e8c0c0}
+.modal-actions{display:flex;gap:0.8rem;justify-content:flex-end;margin-top:1.5rem;border-top:1px solid #333;padding-top:1.2rem}
+#trigger-panel{background:#1a1212;border-top:1px solid #3a2020;padding:1.5rem 2rem}
+#trigger-panel h2{font-family:'Playfair Display',serif;color:#cc2200;margin-bottom:1rem;font-size:1.4rem}
+.trigger-input-row{display:flex;gap:0.5rem;margin-bottom:1rem}
+.trigger-input-row input{flex:1;background:#252525;border:1px solid #444;color:#e8e0d0;padding:0.5rem 0.7rem;border-radius:4px;font-family:'Lora',serif;font-size:0.9rem}
+.trigger-list{display:flex;flex-wrap:wrap;gap:0.5rem}
+.trigger-item{background:#2a1515;border:1px solid #552222;color:#d08080;font-size:0.85rem;padding:0.3rem 0.7rem;border-radius:4px;display:flex;align-items:center;gap:0.4rem}
+.trigger-item button{background:none;border:none;color:#995555;cursor:pointer;font-size:0.85rem;padding:0;line-height:1}
+.trigger-item button:hover{color:#ff4444}
+#empty-state{text-align:center;padding:4rem 2rem;color:#555}
+#empty-state h2{font-family:'Playfair Display',serif;font-size:2rem;color:#444;margin-bottom:0.5rem}
+</style>
+</head>
+<body>
 
-  .movie-card{background:#222;border:1px solid                                    
-  #333;border-radius:8px;padding:1.2rem;position:relative;transition:transform
-  0.2s,border-color 0.2s}                                                         
-  .movie-card:hover{transform:translateY(-3px);border-color:#cc2200}              
-  .card-header{display:flex;justify-content:space-between;align-items:flex-start;m
-  argin-bottom:0.6rem}                                                            
-  .card-title{font-family:'Playfair                         
-  Display',serif;font-size:1.25rem;color:#e8e0d0;flex:1;padding-right:0.5rem}
-  .card-year{color:#888;font-size:0.85rem;white-space:nowrap}                     
-  .card-genre{color:#cc2200;font-size:0.8rem;margin-bottom:0.5rem;text-transform:u
-  ppercase;letter-spacing:0.08em}                                                 
-  .card-meta{display:flex;gap:0.8rem;margin-bottom:0.6rem;flex-wrap:wrap;align-ite
-  ms:center}                                                                      
-  .card-rating{color:#e8c84a;font-size:0.9rem}                                    
-  .card-status{font-size:0.75rem;padding:0.2rem                                   
-  0.5rem;border-radius:3px;background:#333;color:#aaa}                            
-  .card-status.watched{background:#1a3320;color:#5a9;border:1px solid #2a5535}
-  .card-status.want{background:#1a2040;color:#68a;border:1px solid #2a3560}       
-  .card-status.skip{background:#2a2a2a;color:#777;border:1px solid #444}          
-                                                                                  
-  .disturb-level-display{margin:0.5rem 0;padding:0.4rem                           
-  0.6rem;border-radius:4px;font-size:1rem;font-weight:700;letter-spacing:0.03em}  
-  .disturb-1{background:#1a2a1a;color:#5c5;border:1px solid #2a4a2a}              
-  .disturb-2{background:#2a2a1a;color:#bb8;border:1px solid #4a4a2a}              
-  .disturb-3{background:#2a1a1a;color:#c84;border:1px solid #4a2a1a}
-  .disturb-4{background:#2a1515;color:#d55;border:1px solid #5a2020}              
-  .disturb-5{background:#1f0808;color:#f44;border:1px solid #6a1010}              
-                                                                                  
-  .card-tags{display:flex;flex-wrap:wrap;gap:0.3rem;margin:0.5rem 0}              
-  .tag{background:#2a2020;color:#c87878;font-size:0.75rem;padding:0.15rem         
-  0.45rem;border-radius:3px;border:1px solid #442222}                             
-  .card-notes{color:#999;font-size:0.85rem;font-style:italic;margin-top:0.5rem;bor
-  der-top:1px solid #2a2a2a;padding-top:0.5rem}                                   
-  .card-actions{display:flex;gap:0.4rem;margin-top:0.8rem}                        
-  .card-actions button{font-size:0.75rem;padding:0.25rem 0.6rem}
-                                                                                  
-  .trigger-warning{background:#1f0a0a;border:1px solid      
-  #550000;border-radius:4px;padding:0.3rem                                        
-  0.6rem;margin-top:0.4rem;font-size:0.75rem;color:#c06060}                       
-                                                                                  
-  #modal-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;b
-  ackground:rgba(0,0,0,0.85);z-index:1000;overflow-y:auto}                        
-  #modal-overlay.open{display:flex;align-items:flex-start;justify-content:center;p
-  adding:2rem 1rem}                                                               
-  #modal-box{background:#1e1e1e;border:1px solid
-  #444;border-radius:10px;width:100%;max-width:700px;padding:2rem;margin:auto}    
-  #modal-box h2{font-family:'Playfair                                             
-  Display',serif;color:#e8e0d0;margin-bottom:1.5rem;font-size:1.8rem}
-                                                                                  
-  .form-group{margin-bottom:1.2rem}                         
-  .form-group                                                                     
-  label{display:block;color:#bbb;font-size:0.95rem;margin-bottom:0.4rem}
-  .form-group input,.form-group select,.form-group                                
-  textarea{width:100%;background:#2a2a2a;border:1px solid   
-  #444;color:#e8e0d0;padding:0.6rem                                               
-  0.8rem;border-radius:4px;font-family:'Lora',serif;font-size:0.95rem}
-  .form-group textarea{height:80px;resize:vertical}                               
-  .form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
-                                                                                  
-  .disturb-picker{display:flex;flex-direction:column;gap:0.4rem;margin-top:0.4rem}
-  .disturb-option{display:flex;align-items:center;cursor:pointer;padding:0.35rem
-  0.5rem;border-radius:4px;border:2px solid transparent;transition:all 0.15s}     
-  .disturb-option:hover{background:#2a2020}                                       
-  .disturb-option input[type="radio"]{margin-right:0.6rem;accent-color:#cc2200}   
-  .disturb-option-bar{flex:1;height:28px;border-radius:4px;display:flex;align-item
-  s:center;padding:0 0.7rem;font-size:0.95rem;font-weight:600;letter-spacing:0.02e
-  m;transition:opacity 0.15s}                                                     
-  .disturb-option.selected{border-color:#cc2200}            
-  .bar-1{background:#1a3a1a;color:#6d6}                                           
-  .bar-2{background:#2a2a1a;color:#cc8}                     
-  .bar-3{background:#3a2010;color:#c84}                                           
-  .bar-4{background:#3a1515;color:#d55}                     
-  .bar-5{background:#2a0808;color:#f44}                                           
-                                                                                  
-  .tag-section-title{color:#cc2200;font-size:1rem;font-weight:700;margin:0.8rem 0 
-  0.4rem;letter-spacing:0.05em;text-transform:uppercase;font-family:'Playfair     
-  Display',serif}                                           
-  .tags-grid{display:flex;flex-wrap:wrap;gap:0.4rem;margin-bottom:0.5rem}         
-  .tag-checkbox{display:inline-flex;align-items:center;gap:0.3rem;background:#2525
-  25;border:1px solid #3a3a3a;border-radius:4px;padding:0.3rem                    
-  0.6rem;cursor:pointer;font-size:0.9rem;color:#ccc;transition:all 0.15s}
-  .tag-checkbox:hover{border-color:#cc2200;color:#e8e0d0}                         
-  .tag-checkbox input{accent-color:#cc2200}                                       
-  .tag-checkbox.checked{background:#2a1515;border-color:#cc2200;color:#e8c0c0}    
-                                                                                  
-  .modal-actions{display:flex;gap:0.8rem;justify-content:flex-end;margin-top:1.5re
-  m;border-top:1px solid #333;padding-top:1.2rem}
-                                                                                  
-  #trigger-panel{background:#1a1212;border-top:1px solid #3a2020;padding:1.5rem   
-  2rem}                                                                           
-  #trigger-panel h2{font-family:'Playfair                                         
-  Display',serif;color:#cc2200;margin-bottom:1rem;font-size:1.4rem}               
-  .trigger-input-row{display:flex;gap:0.5rem;margin-bottom:1rem}
-  .trigger-input-row input{flex:1;background:#252525;border:1px solid             
-  #444;color:#e8e0d0;padding:0.5rem                                               
-  0.7rem;border-radius:4px;font-family:'Lora',serif;font-size:0.9rem}
-  .trigger-list{display:flex;flex-wrap:wrap;gap:0.5rem}                           
-  .trigger-item{background:#2a1515;border:1px solid                               
-  #552222;color:#d08080;font-size:0.85rem;padding:0.3rem                          
-  0.7rem;border-radius:4px;display:flex;align-items:center;gap:0.4rem}            
-  .trigger-item button{background:none;border:none;color:#995555;cursor:pointer;fo
-  nt-size:0.85rem;padding:0;line-height:1}                                        
-  .trigger-item button:hover{color:#ff4444}
-                                                                                  
-  #empty-state{text-align:center;padding:4rem 2rem;color:#555}                    
-  #empty-state h2{font-family:'Playfair   
-  Display',serif;font-size:2rem;color:#444;margin-bottom:0.5rem}                  
-  </style>                                                                        
-  </head>                                                                         
-  <body>                                                                          
-                                                            
-  <div id="app-header">                                                           
-    <h1>Elizabeth&#39;s <span>Disturbing</span> Movie Habit</h1>
-    <p>a curated collection of cinematic unease</p>
-  </div>                                      
-                                          
-  <div id="controls">                                                             
-    <div class="filter-group">                                                    
-      <label>Status:</label>                                                      
-      <select id="filter-status">                                                 
-        <option value="all">All</option>                    
+<div id="app-header">
+  <h1>Elizabeth&#39;s <span>Disturbing</span> Movie Habit</h1>
+  <p>a curated collection of cinematic unease</p>
+</div>
+
+<div id="controls">
+  <div class="filter-group">
+    <label>Status:</label>
+    <select id="filter-status">
+      <option value="all">All</option>
+      <option value="watched">Watched</option>
+      <option value="want">Want to Watch</option>
+      <option value="skip">Skip</option>
+    </select>
+    <label>Genre:</label>
+    <select id="filter-genre">
+      <option value="all">All Genres</option>
+    </select>
+    <label>Disturb Level:</label>
+    <select id="filter-disturb">
+      <option value="all">Any Level</option>
+      <option value="1">1 - Safe for Normies</option>
+      <option value="2">2 - Horror Fans Only</option>
+      <option value="3">3 - Party Ruiner</option>
+      <option value="4">4 - True Freaks</option>
+      <option value="5">5 - Medical Attention</option>
+    </select>
+    <label>Sort:</label>
+    <select id="sort-by">
+      <option value="added">Recently Added</option>
+      <option value="disturb-desc">Most Disturbing</option>
+      <option value="disturb-asc">Least Disturbing</option>
+      <option value="title">Title A-Z</option>
+      <option value="year-desc">Newest Film</option>
+      <option value="year-asc">Oldest Film</option>
+      <option value="rating-desc">Highest Rated</option>
+    </select>
+    <input type="text" id="filter-search" placeholder="Search..." style="width:140px">
+  </div>
+  <button class="btn-primary" onclick="openModal()">+ Add Movie</button>
+</div>
+
+<div id="stats-bar">
+  <div>Total: <span id="stat-total">0</span></div>
+  <div>Watched: <span id="stat-watched">0</span></div>
+  <div>Want to Watch: <span id="stat-want">0</span></div>
+  <div>Avg Disturb Level: <span id="stat-disturb">-</span></div>
+  <div>Most Common Tag: <span id="stat-tag">-</span></div>
+</div>
+
+<div id="movie-grid"></div>
+
+<div id="trigger-panel">
+  <h2>My Trigger Warnings</h2>
+  <p style="color:#888;font-size:0.85rem;margin-bottom:0.8rem">Movies containing these tags will show a warning on their card.</p>
+  <div class="trigger-input-row">
+    <input type="text" id="trigger-input" placeholder="Add a trigger (e.g. animal harm)">
+    <button class="btn-secondary" onclick="addTrigger()">Add</button>
+  </div>
+  <div class="trigger-list" id="trigger-list"></div>
+</div>
+
+<div id="modal-overlay" onclick="overlayClick(event)">
+  <div id="modal-box">
+    <h2 id="modal-title">Add a Movie</h2>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Title</label>
+        <input type="text" id="f-title" placeholder="Film title">
+      </div>
+      <div class="form-group">
+        <label>Year</label>
+        <input type="number" id="f-year" placeholder="2024" min="1888" max="2099">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Genre</label>
+        <input type="text" id="f-genre" placeholder="Horror, Drama, Thriller...">
+      </div>
+      <div class="form-group">
+        <label>Your Rating</label>
+        <select id="f-rating">
+          <option value="">-- no rating --</option>
+          <option value="5 stars">5 stars</option>
+          <option value="4 stars">4 stars</option>
+          <option value="3 stars">3 stars</option>
+          <option value="2 stars">2 stars</option>
+          <option value="1 star">1 star</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Status</label>
+      <select id="f-status">
         <option value="watched">Watched</option>
         <option value="want">Want to Watch</option>
         <option value="skip">Skip</option>
-      </select>                                                                   
-      <label>Genre:</label>
-      <select id="filter-genre">                                                  
-        <option value="all">All Genres</option>             
       </select>
-      <label>Disturb Level:</label>                                               
-      <select id="filter-disturb">
-        <option value="all">Any Level</option>                                    
-        <option value="1">1 - Safe for Normies</option>     
-        <option value="2">2 - Horror Fans Only</option>
-        <option value="3">3 - Party Ruiner</option>                               
-        <option value="4">4 - True Freaks</option>
-        <option value="5">5 - Medical Attention</option>                          
-      </select>                                             
-      <label>Sort:</label>                                                        
-      <select id="sort-by">                                 
-        <option value="added">Recently Added</option>                             
-        <option value="disturb-desc">Most Disturbing</option>
-        <option value="disturb-asc">Least Disturbing</option>                     
-        <option value="title">Title A-Z</option>
-        <option value="year-desc">Newest Film</option>                            
-        <option value="year-asc">Oldest Film</option>                             
-        <option value="rating-desc">Highest Rated</option>
-      </select>                                                                   
-      <input type="text" id="filter-search" placeholder="Search..." 
-  style="width:140px">                                                            
-    </div>                                                                        
-    <button class="btn-primary" onclick="openModal()">+ Add Movie</button>
-  </div>                                                                          
-                                                            
-  <div id="stats-bar">
-    <div>Total: <span id="stat-total">0</span></div>                              
-    <div>Watched: <span id="stat-watched">0</span></div>
-    <div>Want to Watch: <span id="stat-want">0</span></div>                       
-    <div>Avg Disturb Level: <span id="stat-disturb">-</span></div>
-    <div>Most Common Tag: <span id="stat-tag">-</span></div>                      
-  </div>                                      
-                                                                                  
-  <div id="movie-grid"></div>                               
-                                                                                  
-  <div id="trigger-panel">                                  
-    <h2>My Trigger Warnings</h2>                                                  
-    <p style="color:#888;font-size:0.85rem;margin-bottom:0.8rem">Movies containing
-   these tags will show a warning on their card.</p>
-    <div class="trigger-input-row">       
-      <input type="text" id="trigger-input" placeholder="Add a trigger (e.g.      
-  animal harm)">                                                                  
-      <button class="btn-secondary" onclick="addTrigger()">Add</button>           
-    </div>                                                                        
-    <div class="trigger-list" id="trigger-list"></div>                            
-  </div>
-                                                                                  
-  <div id="modal-overlay" onclick="overlayClick(event)">    
-    <div id="modal-box">
-      <h2 id="modal-title">Add a Movie</h2>                                       
-      <div class="form-row">                  
-        <div class="form-group">                                                  
-          <label>Title *</label>                            
-          <input type="text" id="f-title" placeholder="Film title">               
-        </div>                                
-        <div class="form-group">                                                  
-          <label>Year</label>                               
-          <input type="number" id="f-year" placeholder="2024" min="1888"          
-  max="2099">                                 
-        </div>                                                                    
-      </div>                                                
-      <div class="form-row">                                                      
-        <div class="form-group">
-          <label>Genre</label>                                                    
-          <input type="text" id="f-genre" placeholder="Horror, Drama, 
-  Thriller...">                           
-        </div>
-        <div class="form-group">                                                  
-          <label>Your Rating</label>          
-          <select id="f-rating">                                                  
-            <option value="">-- no rating --</option>       
-            <option value="5 stars">5 stars</option>                              
-            <option value="4 stars">4 stars</option>
-            <option value="3 stars">3 stars</option>                              
-            <option value="2 stars">2 stars</option>        
-            <option value="1 star">1 star</option>                                
-          </select>                       
-        </div>                                                                    
-      </div>                                                                      
-      <div class="form-group">
-        <label>Status</label>                                                     
-        <select id="f-status">                              
-          <option value="watched">Watched</option>
-          <option value="want">Want to Watch</option>
-          <option value="skip">Skip</option>
-        </select>                                                                 
-      </div>
-                                                                                  
-      <div class="form-group">                              
-        <label>Disturbance Level</label>
-        <div class="disturb-picker" id="disturb-picker">                          
-          <label class="disturb-option" id="dlabel-1">
-            <input type="radio" name="disturb" value="1"                          
-  onchange="selectDisturb(1)">                              
-            <div class="disturb-option-bar bar-1">1 &mdash; safe for normies</div>
-          </label>                                                                
-          <label class="disturb-option" id="dlabel-2">                            
-            <input type="radio" name="disturb" value="2"                          
-  onchange="selectDisturb(2)">                                                    
-            <div class="disturb-option-bar bar-2">2 &mdash; only if you actually  
-  like horror movies</div>                                                        
-          </label>                                                                
-          <label class="disturb-option" id="dlabel-3">      
-            <input type="radio" name="disturb" value="3"                          
-  onchange="selectDisturb(3)">            
-            <div class="disturb-option-bar bar-3">3 &mdash; now you are ruining   
-  the party for everyone</div>                                                    
-          </label>                        
-          <label class="disturb-option" id="dlabel-4">                            
-            <input type="radio" name="disturb" value="4"                          
-  onchange="selectDisturb(4)">                
-            <div class="disturb-option-bar bar-4">4 &mdash; only for true         
-  disturbia freaks</div>                                    
-          </label>                                                                
-          <label class="disturb-option" id="dlabel-5">
-            <input type="radio" name="disturb" value="5"                          
-  onchange="selectDisturb(5)">                              
-            <div class="disturb-option-bar bar-5">5 &mdash; you may need medical  
-  attention</div>                                           
-          </label>                                                                
-        </div>
-      </div>                                                                      
-                                                            
-      <div class="form-group">            
-        <label>Disturbing Qualities</label>
-                                                                                  
-        <div class="tag-section-title">Violence &amp; Harm</div>
-        <div class="tags-grid" id="tags-violence"></div>                          
-                                                            
-        <div class="tag-section-title">Psychological</div>                        
-        <div class="tags-grid" id="tags-psychological"></div>
-                                                                                  
-        <div class="tag-section-title">Emotional</div>                            
-        <div class="tags-grid" id="tags-emotional"></div>
-                                                                                  
-        <div class="tag-section-title">Social &amp; Cultural</div>                
-        <div class="tags-grid" id="tags-social"></div>
-      </div>                                                                      
-                                                            
-      <div class="form-group">
-        <label>Notes</label>                                                      
-        <textarea id="f-notes" placeholder="Your thoughts, warnings for 
-  others..."></textarea>                                                          
-      </div>                                                
-
-      <div class="modal-actions">                                                 
-        <button class="btn-secondary" onclick="closeModal()">Cancel</button>
-        <button class="btn-primary" onclick="saveMovie()">Save Movie</button>     
-      </div>                                                
     </div>
-  </div>                                                                          
-   
-  <script>                                                                        
-  var DISTURB_LABELS = [                                    
-    '',                                       
-    'safe for normies',                   
-    'only if you actually like horror movies',
-    'now you are ruining the party for everyone',                                 
-    'only for true disturbia freaks',
-    'you may need medical attention'                                              
-  ];                                                        
+    <div class="form-group">
+      <label>Disturbance Level</label>
+      <div class="disturb-picker" id="disturb-picker">
+        <label class="disturb-option" id="dlabel-1">
+          <input type="radio" name="disturb" value="1" onchange="selectDisturb(1)">
+          <div class="disturb-option-bar bar-1">1 &mdash; safe for normies</div>
+        </label>
+        <label class="disturb-option" id="dlabel-2">
+          <input type="radio" name="disturb" value="2" onchange="selectDisturb(2)">
+          <div class="disturb-option-bar bar-2">2 &mdash; only if you actually like horror movies</div>
+        </label>
+        <label class="disturb-option" id="dlabel-3">
+          <input type="radio" name="disturb" value="3" onchange="selectDisturb(3)">
+          <div class="disturb-option-bar bar-3">3 &mdash; now you are ruining the party for everyone</div>
+        </label>
+        <label class="disturb-option" id="dlabel-4">
+          <input type="radio" name="disturb" value="4" onchange="selectDisturb(4)">
+          <div class="disturb-option-bar bar-4">4 &mdash; only for true disturbia freaks</div>
+        </label>
+        <label class="disturb-option" id="dlabel-5">
+          <input type="radio" name="disturb" value="5" onchange="selectDisturb(5)">
+          <div class="disturb-option-bar bar-5">5 &mdash; you may need medical attention</div>
+        </label>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Disturbing Qualities</label>
+      <div class="tag-section-title">Violence &amp; Harm</div>
+      <div class="tags-grid" id="tags-violence"></div>
+      <div class="tag-section-title">Psychological</div>
+      <div class="tags-grid" id="tags-psychological"></div>
+      <div class="tag-section-title">Emotional</div>
+      <div class="tags-grid" id="tags-emotional"></div>
+      <div class="tag-section-title">Social &amp; Cultural</div>
+      <div class="tags-grid" id="tags-social"></div>
+    </div>
+    <div class="form-group">
+      <label>Notes</label>
+      <textarea id="f-notes" placeholder="Your thoughts, warnings for others..."></textarea>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-secondary" onclick="closeModal()">Cancel</button>
+      <button class="btn-primary" onclick="saveMovie()">Save Movie</button>
+    </div>
+  </div>
+</div>
 
-  var TAG_GROUPS = {                                                              
-    'violence': ['violent','sexual violence','body horror','disturbing 
-  visuals','animal harm','child in peril','hostage','jump scares'],               
-    'psychological': ['descent into madness','psychological torture','not being 
-  believed','gaslighting','too close to home','realistic','existential dread'],
-    'emotional': ['made me sad','grief','traumy mommy','rug pulls','no redemption 
-  arc'],                                      
-    'social': ['cults','taboo relationships','weird sex stuff','based on true     
-  events','religious horror','cosmic horror']               
-  };                                                                              
-                                                            
-  var movies = [];                                                                
-  var triggers = [];                                        
-  var editingId = null;                                                           
-                                                            
-  function loadData() {                   
-    var m = localStorage.getItem('mes-movie-list');
-    var t = localStorage.getItem('mes-movie-triggers');                           
-    movies = m ? JSON.parse(m) : [];      
-    triggers = t ? JSON.parse(t) : [];                                            
-  }                                                                               
-   
-  function saveData() {                                                           
-    localStorage.setItem('mes-movie-list', JSON.stringify(movies));
-    localStorage.setItem('mes-movie-triggers', JSON.stringify(triggers));         
-  }                                                         
-                                          
-  function uid() {
-    return Math.random().toString(36).substr(2,9) + Date.now().toString(36);      
-  }                                           
-                                                                                  
-  function buildTagSections() {                             
-    var groups = ['violence','psychological','emotional','social'];               
-    for (var i = 0; i < groups.length; i++) {
-      var key = groups[i];                                                        
-      var container = document.getElementById('tags-' + key);
-      container.innerHTML = '';
-      var tagList = TAG_GROUPS[key];                                              
-      for (var j = 0; j < tagList.length; j++) {
-        var tag = tagList[j];                                                     
-        var label = document.createElement('label');                              
-        label.className = 'tag-checkbox';     
-        label.setAttribute('data-tag', tag);                                      
-        var cb = document.createElement('input');           
-        cb.type = 'checkbox';                                                     
-        cb.value = tag;                   
-        cb.onchange = function() {                                                
-          var lbl = this.parentNode;                                              
-          if (this.checked) {                 
-            lbl.className = 'tag-checkbox checked';                               
-          } else {                                          
-            lbl.className = 'tag-checkbox';                                       
-          }                                   
-        };                                                                        
-        label.appendChild(cb);                              
-        label.appendChild(document.createTextNode(tag));                          
-        container.appendChild(label);
-      }                                                                           
-    }                                                       
-  }
+<script>
+var DISTURB_LABELS = ["","safe for normies","only if you actually like horror movies","now you are ruining the party for everyone","only for true disturbia freaks","you may need medical attention"];
 
-  function openModal(id) {                    
-    editingId = id || null;               
-    document.getElementById('modal-title').textContent = id ? 'Edit Movie' : 'Add 
-  a Movie';                                                                       
-    document.getElementById('f-title').value = '';
-    document.getElementById('f-year').value = '';                                 
-    document.getElementById('f-genre').value = '';          
-    document.getElementById('f-rating').value = '';
-    document.getElementById('f-status').value = 'watched';                        
-    document.getElementById('f-notes').value = '';
-    var radios = document.querySelectorAll('input[name="disturb"]');              
-    for (var i = 0; i < radios.length; i++) {               
-      radios[i].checked = false;              
-    }                                                                             
-    for (var n = 1; n <= 5; n++) {
-      var lbl = document.getElementById('dlabel-' + n);                           
-      if (lbl) lbl.className = 'disturb-option';            
-    }                                                                             
-    var allCbs = document.querySelectorAll('.tag-checkbox input');
-    for (var k = 0; k < allCbs.length; k++) {                                     
-      allCbs[k].checked = false;          
-      allCbs[k].parentNode.className = 'tag-checkbox';                            
-    }                                                                             
-    if (id) {                             
-      var movie = null;                                                           
-      for (var m = 0; m < movies.length; m++) {                                   
-        if (movies[m].id === id) { movie = movies[m]; break; }
-      }                                                                           
-      if (movie) {                                          
-        document.getElementById('f-title').value = movie.title || '';             
-        document.getElementById('f-year').value = movie.year || '';
-        document.getElementById('f-genre').value = movie.genre || '';             
-        document.getElementById('f-rating').value = movie.rating || '';
-        document.getElementById('f-status').value = movie.status || 'watched';    
-        document.getElementById('f-notes').value = movie.notes || '';
-        if (movie.disturb) {                                                      
-          var r = document.querySelector('input[name="disturb"][value="' +
-  movie.disturb + '"]');                                                          
-          if (r) { r.checked = true; selectDisturb(movie.disturb); }
-        }                                                                         
-        if (movie.tags) {                                                         
-          for (var t = 0; t < movie.tags.length; t++) {
-            var cb2 = document.querySelector('.tag-checkbox input[value="' +      
-  movie.tags[t] + '"]');                                    
-            if (cb2) { cb2.checked = true; cb2.parentNode.className =             
-  'tag-checkbox checked'; }
-          }                                                                       
-        }                                                   
-      }                                                                           
-    }                                                       
-    document.getElementById('modal-overlay').className = 'open';
-  }                                           
-                                          
-  function closeModal() {
-    document.getElementById('modal-overlay').className = '';                      
-  }
-                                                                                  
-  function overlayClick(e) {                                
-    if (e.target === document.getElementById('modal-overlay')) closeModal();
-  }
-                                              
-  function selectDisturb(n) {             
-    for (var i = 1; i <= 5; i++) {
-      var lbl = document.getElementById('dlabel-' + i);                           
-      if (lbl) {
-        lbl.className = i === n ? 'disturb-option selected' : 'disturb-option';   
-      }                                                     
+var TAG_GROUPS = {
+  violence: ["violent","sexual violence","body horror","disturbing visuals","animal harm","child in peril","hostage","jump scares"],
+  psychological: ["descent into madness","psychological torture","not being believed","gaslighting","too close to home","realistic","existential dread"],
+  emotional: ["made me sad","grief","traumy mommy","rug pulls","no redemption arc"],
+  social: ["cults","taboo relationships","weird sex stuff","based on true events","religious horror","cosmic horror"]
+};
+
+var movies = [];
+var triggers = [];
+var editingId = null;
+
+function loadData() {
+  var m = localStorage.getItem("mes-movie-list");
+  var t = localStorage.getItem("mes-movie-triggers");
+  movies = m ? JSON.parse(m) : [];
+  triggers = t ? JSON.parse(t) : [];
+}
+
+function saveData() {
+  localStorage.setItem("mes-movie-list", JSON.stringify(movies));
+  localStorage.setItem("mes-movie-triggers", JSON.stringify(triggers));
+}
+
+function uid() {
+  return Math.random().toString(36).substr(2, 9) + Date.now().toString(36);
+}
+
+function buildTagSections() {
+  var groups = ["violence","psychological","emotional","social"];
+  for (var i = 0; i < groups.length; i++) {
+    var key = groups[i];
+    var container = document.getElementById("tags-" + key);
+    container.innerHTML = "";
+    var tagList = TAG_GROUPS[key];
+    for (var j = 0; j < tagList.length; j++) {
+      var tag = tagList[j];
+      var lbl = document.createElement("label");
+      lbl.className = "tag-checkbox";
+      lbl.setAttribute("data-tag", tag);
+      var cb = document.createElement("input");
+      cb.type = "checkbox";
+      cb.value = tag;
+      cb.onchange = function() {
+        if (this.checked) {
+          this.parentNode.className = "tag-checkbox checked";
+        } else {
+          this.parentNode.className = "tag-checkbox";
+        }
+      };
+      lbl.appendChild(cb);
+      lbl.appendChild(document.createTextNode(tag));
+      container.appendChild(lbl);
     }
-  }                                                                               
-  
-  function saveMovie() {                                                          
-    var title = document.getElementById('f-title').value.trim();
-    if (!title) { alert('Please enter a title.'); return; }
-    var disturb = 0;                      
-    var radios = document.querySelectorAll('input[name="disturb"]');
-    for (var i = 0; i < radios.length; i++) {                                     
-      if (radios[i].checked) disturb = parseInt(radios[i].value);
-    }                                                                             
-    var tags = [];                                                                
-    var cbs = document.querySelectorAll('.tag-checkbox input:checked');
-    for (var j = 0; j < cbs.length; j++) {                                        
-      tags.push(cbs[j].value);                              
-    }                                                                             
-    var movie = {                                           
-      id: editingId || uid(),                                                     
-      title: title,
-      year: document.getElementById('f-year').value.trim(),                       
-      genre: document.getElementById('f-genre').value.trim(),
-      rating: document.getElementById('f-rating').value,
-      status: document.getElementById('f-status').value,
-      notes: document.getElementById('f-notes').value.trim(),                     
-      disturb: disturb,                       
-      tags: tags,                                                                 
-      added: editingId ? (getMovie(editingId) || {}).added || Date.now() :
-  Date.now()                                                                      
-    };                                    
-    if (editingId) {                                                              
-      for (var m = 0; m < movies.length; m++) {                                   
-        if (movies[m].id === editingId) { movies[m] = movie; break; }
-      }                                                                           
-    } else {                                                
-      movies.unshift(movie);                                                      
-    }
-    saveData();                                                                   
-    closeModal();                                           
-    renderAll();
-  }                                                                               
-  
-  function getMovie(id) {                                                         
-    for (var i = 0; i < movies.length; i++) {               
-      if (movies[i].id === id) return movies[i];
-    }                                         
-    return null;                          
   }
-                                                                                  
-  function deleteMovie(id) {
-    if (!confirm('Remove this movie?')) return;                                   
-    movies = movies.filter(function(m) { return m.id !== id; });
-    saveData();                               
-    renderAll();                          
+}
+
+function openModal(id) {
+  editingId = id || null;
+  document.getElementById("modal-title").textContent = id ? "Edit Movie" : "Add a Movie";
+  document.getElementById("f-title").value = "";
+  document.getElementById("f-year").value = "";
+  document.getElementById("f-genre").value = "";
+  document.getElementById("f-rating").value = "";
+  document.getElementById("f-status").value = "watched";
+  document.getElementById("f-notes").value = "";
+  var radios = document.querySelectorAll("input[name=\"disturb\"]");
+  for (var i = 0; i < radios.length; i++) {
+    radios[i].checked = false;
   }
-                                                                                  
-  function addTrigger() {
-    var val = document.getElementById('trigger-input').value.trim().toLowerCase();
-    if (!val) return;                                       
-    if (triggers.indexOf(val) === -1) {       
-      triggers.push(val);                 
-      saveData();
-      renderTriggers();                                                           
-    }
-    document.getElementById('trigger-input').value = '';                          
-  }                                                         
-                                          
-  function removeTrigger(val) {
-    triggers = triggers.filter(function(t) { return t !== val; });                
-    saveData();
-    renderTriggers();                                                             
-    renderMovies();                                         
-  }                                           
-                                          
-  function renderTriggers() {
-    var list = document.getElementById('trigger-list');                           
-    list.innerHTML = '';
-    for (var i = 0; i < triggers.length; i++) {                                   
-      var item = document.createElement('div');             
-      item.className = 'trigger-item';        
-      item.innerHTML = triggers[i] + ' <button onclick="removeTrigger(\'' +
-  triggers[i].replace(/'/g,"&#39;") + '\')">x</button>';
-      list.appendChild(item);                                                     
-    }
-  }                                                                               
-                                                            
-  function getFilteredMovies() {                                                  
-    var status = document.getElementById('filter-status').value;
-    var genre = document.getElementById('filter-genre').value;
-    var disturb = document.getElementById('filter-disturb').value;
-    var search =
-  document.getElementById('filter-search').value.toLowerCase().trim();            
-    var sort = document.getElementById('sort-by').value;
-                                                                                  
-    var result = movies.filter(function(m) {                                      
-      if (status !== 'all' && m.status !== status) return false;
-      if (genre !== 'all' && m.genre !== genre) return false;                     
-      if (disturb !== 'all' && String(m.disturb) !== disturb) return false;
-      if (search) {
-        var hay = (m.title + ' ' + m.genre + ' ' + m.notes).toLowerCase();        
-        if (hay.indexOf(search) === -1) return false;
-      }                                                                           
-      return true;                                                                
-    });
-                                                                                  
-    result.sort(function(a, b) {                            
-      if (sort === 'disturb-desc') return (b.disturb || 0) - (a.disturb || 0);    
-      if (sort === 'disturb-asc') return (a.disturb || 0) - (b.disturb || 0);
-      if (sort === 'title') return (a.title || '').localeCompare(b.title || '');
-      if (sort === 'year-desc') return (b.year || 0) - (a.year || 0);
-      if (sort === 'year-asc') return (a.year || 9999) - (b.year || 9999);        
-      if (sort === 'rating-desc') return (b.rating || '').localeCompare(a.rating
-  || '');                                                                         
-      return (b.added || 0) - (a.added || 0);               
-    });                                                                           
-    return result;                                          
-  }                                                                               
-                                                                                  
-  function hasTrigger(movie) {                
-    if (!movie.tags || triggers.length === 0) return false;                       
-    for (var i = 0; i < movie.tags.length; i++) {           
-      if (triggers.indexOf(movie.tags[i]) !== -1) return true;                    
-    }                                     
-    return false;                                                                 
-  }                                                                               
-   
-  function stars(rating) {                                                        
-    if (!rating) return '';                                 
-    return rating;
-  }                                                                               
-   
-  function renderMovies() {                                                       
-    var grid = document.getElementById('movie-grid');       
-    var list = getFilteredMovies();           
-    if (list.length === 0) {              
-      grid.innerHTML = '<div id="empty-state"><h2>No movies found</h2><p>Add one 
-  or adjust your filters.</p></div>';                                             
-      return;                             
-    }                                                                             
-    grid.innerHTML = '';                                                          
-    for (var i = 0; i < list.length; i++) {   
-      var m = list[i];                                                            
-      var card = document.createElement('div');             
-      card.className = 'movie-card';                                              
-                                              
-      var disturbHTML = '';                                                       
-      if (m.disturb) {                                      
-        disturbHTML = '<div class="disturb-level-display disturb-' + m.disturb +  
-  '">' +                                      
-          'Level ' + m.disturb + ' &mdash; ' + DISTURB_LABELS[m.disturb] +        
-          '</div>';                                         
-      }                                                                           
-   
-      var tagsHTML = '';                                                          
-      if (m.tags && m.tags.length > 0) {                    
-        tagsHTML = '<div class="card-tags">';                                     
-        for (var t = 0; t < m.tags.length; t++) {           
-          tagsHTML += '<span class="tag">' + m.tags[t] + '</span>';
-        }                                     
-        tagsHTML += '</div>';                                                     
+  for (var n = 1; n <= 5; n++) {
+    var lbl2 = document.getElementById("dlabel-" + n);
+    if (lbl2) lbl2.className = "disturb-option";
+  }
+  var allCbs = document.querySelectorAll(".tag-checkbox input");
+  for (var k = 0; k < allCbs.length; k++) {
+    allCbs[k].checked = false;
+    allCbs[k].parentNode.className = "tag-checkbox";
+  }
+  if (id) {
+    var movie = getMovie(id);
+    if (movie) {
+      document.getElementById("f-title").value = movie.title || "";
+      document.getElementById("f-year").value = movie.year || "";
+      document.getElementById("f-genre").value = movie.genre || "";
+      document.getElementById("f-rating").value = movie.rating || "";
+      document.getElementById("f-status").value = movie.status || "watched";
+      document.getElementById("f-notes").value = movie.notes || "";
+      if (movie.disturb) {
+        var r = document.querySelector("input[name=\"disturb\"][value=\"" + movie.disturb + "\"]");
+        if (r) { r.checked = true; selectDisturb(movie.disturb); }
       }
-                                                                                  
-      var notesHTML = m.notes ? '<div class="card-notes">' + m.notes + '</div>' :
-  '';                                                                             
-                                                            
-      var trigHTML = '';                      
-      if (hasTrigger(m)) {                
-        trigHTML = '<div class="trigger-warning">&#9888; Contains your trigger 
-  warnings</div>';                                                                
-      }                                   
-                                                                                  
-      var statusLabel = m.status === 'watched' ? 'Watched' : m.status === 'want' ?
-   'Want to Watch' : 'Skip';              
-                                                                                  
-      card.innerHTML =                                                            
-        '<div class="card-header">' +     
-          '<div class="card-title">' + (m.title || 'Untitled') + '</div>' +       
-          (m.year ? '<div class="card-year">' + m.year + '</div>' : '') +         
-        '</div>' +                            
-        (m.genre ? '<div class="card-genre">' + m.genre + '</div>' : '') +        
-        '<div class="card-meta">' +                         
-          (m.rating ? '<span class="card-rating">' + stars(m.rating) + '</span>' :
-   '') +
-          '<span class="card-status ' + (m.status || '') + '">' + statusLabel +   
-  '</span>' +                                               
-        '</div>' +                                                                
-        disturbHTML +                                       
-        tagsHTML +                                                                
-        trigHTML +
-        notesHTML +                                                               
-        '<div class="card-actions">' +                      
-          '<button class="btn-secondary" onclick="openModal(\'' + m.id +
-  '\')">Edit</button>' +
-          '<button class="btn-danger" onclick="deleteMovie(\'' + m.id +           
-  '\')">Delete</button>' +                    
-        '</div>';                                                                 
-                                                            
-      grid.appendChild(card);                                                     
+      if (movie.tags) {
+        for (var t = 0; t < movie.tags.length; t++) {
+          var cb2 = document.querySelector(".tag-checkbox input[value=\"" + movie.tags[t] + "\"]");
+          if (cb2) { cb2.checked = true; cb2.parentNode.className = "tag-checkbox checked"; }
+        }
+      }
     }
-  }                                                                               
-                                                            
-  function updateStats() {
-    var total = movies.length;
-    var watched = movies.filter(function(m) { return m.status === 'watched';
-  }).length;                                  
-    var want = movies.filter(function(m) { return m.status === 'want'; }).length;
-    var withDisturb = movies.filter(function(m) { return m.disturb > 0; });
-    var avgD = '-';                                                               
-    if (withDisturb.length > 0) {         
-      var sum = 0;                                                                
-      for (var i = 0; i < withDisturb.length; i++) sum += withDisturb[i].disturb; 
-      avgD = (sum / withDisturb.length).toFixed(1);
-    }                                                                             
-    var tagCounts = {};                                     
-    for (var j = 0; j < movies.length; j++) {                                     
-      if (movies[j].tags) {                                                       
-        for (var k = 0; k < movies[j].tags.length; k++) {
-          var tg = movies[j].tags[k];                                             
-          tagCounts[tg] = (tagCounts[tg] || 0) + 1;         
-        }                                                                         
-      }                                   
-    }                                                                             
-    var topTag = '-';                                                             
-    var topCount = 0;
-    for (var tag in tagCounts) {                                                  
-      if (tagCounts[tag] > topCount) { topCount = tagCounts[tag]; topTag = tag; }
-    }                                     
-    document.getElementById('stat-total').textContent = total;
-    document.getElementById('stat-watched').textContent = watched;                
-    document.getElementById('stat-want').textContent = want;
-    document.getElementById('stat-disturb').textContent = avgD;                   
-    document.getElementById('stat-tag').textContent = topTag;                     
-  }                                       
-                                                                                  
-  function updateGenreFilter() {                                                  
-    var genres = {};
-    for (var i = 0; i < movies.length; i++) {                                     
-      if (movies[i].genre) genres[movies[i].genre] = true;  
-    }                                     
-    var sel = document.getElementById('filter-genre');
-    var cur = sel.value;                                                          
-    sel.innerHTML = '<option value="all">All Genres</option>';
-    for (var g in genres) {                                                       
-      var opt = document.createElement('option');           
-      opt.value = g;                                                              
-      opt.textContent = g;                    
-      if (g === cur) opt.selected = true;                                         
-      sel.appendChild(opt);                                 
-    }                                                                             
   }
-                                                                                  
-  function renderAll() {                                    
-    updateGenreFilter();
-    updateStats();                            
-    renderMovies();                       
+  document.getElementById("modal-overlay").className = "open";
+}
+
+function closeModal() {
+  document.getElementById("modal-overlay").className = "";
+}
+
+function overlayClick(e) {
+  if (e.target === document.getElementById("modal-overlay")) closeModal();
+}
+
+function selectDisturb(n) {
+  for (var i = 1; i <= 5; i++) {
+    var lbl3 = document.getElementById("dlabel-" + i);
+    if (lbl3) {
+      lbl3.className = (i === n) ? "disturb-option selected" : "disturb-option";
+    }
   }
-                                                                                  
-  document.getElementById('filter-status').onchange = renderAll;
-  document.getElementById('filter-genre').onchange = renderAll;                   
-  document.getElementById('filter-disturb').onchange = renderAll;
-  document.getElementById('sort-by').onchange = renderAll;
-  document.getElementById('filter-search').oninput = renderAll;
-  document.getElementById('trigger-input').onkeydown = function(e) {              
-    if (e.key === 'Enter') addTrigger();  
-  };                                                                              
-                                                                                  
-  loadData();
-  buildTagSections();                                                             
-  renderTriggers();                                         
-  renderAll();                            
-  </script>
-  </body>                                                                         
-  </html>
+}
+
+function saveMovie() {
+  var title = document.getElementById("f-title").value.trim();
+  if (!title) { alert("Please enter a title."); return; }
+  var disturb = 0;
+  var radios = document.querySelectorAll("input[name=\"disturb\"]");
+  for (var i = 0; i < radios.length; i++) {
+    if (radios[i].checked) disturb = parseInt(radios[i].value);
+  }
+  var tags = [];
+  var cbs = document.querySelectorAll(".tag-checkbox input:checked");
+  for (var j = 0; j < cbs.length; j++) {
+    tags.push(cbs[j].value);
+  }
+  var existing = editingId ? getMovie(editingId) : null;
+  var movie = {
+    id: editingId || uid(),
+    title: title,
+    year: document.getElementById("f-year").value.trim(),
+    genre: document.getElementById("f-genre").value.trim(),
+    rating: document.getElementById("f-rating").value,
+    status: document.getElementById("f-status").value,
+    notes: document.getElementById("f-notes").value.trim(),
+    disturb: disturb,
+    tags: tags,
+    added: existing ? (existing.added || Date.now()) : Date.now()
+  };
+  if (editingId) {
+    for (var m = 0; m < movies.length; m++) {
+      if (movies[m].id === editingId) { movies[m] = movie; break; }
+    }
+  } else {
+    movies.unshift(movie);
+  }
+  saveData();
+  closeModal();
+  renderAll();
+}
+
+function getMovie(id) {
+  for (var i = 0; i < movies.length; i++) {
+    if (movies[i].id === id) return movies[i];
+  }
+  return null;
+}
+
+function deleteMovie(id) {
+  if (!confirm("Remove this movie?")) return;
+  var next = [];
+  for (var i = 0; i < movies.length; i++) {
+    if (movies[i].id !== id) next.push(movies[i]);
+  }
+  movies = next;
+  saveData();
+  renderAll();
+}
+
+function addTrigger() {
+  var val = document.getElementById("trigger-input").value.trim().toLowerCase();
+  if (!val) return;
+  if (triggers.indexOf(val) === -1) {
+    triggers.push(val);
+    saveData();
+    renderTriggers();
+  }
+  document.getElementById("trigger-input").value = "";
+}
+
+function removeTrigger(val) {
+  var next = [];
+  for (var i = 0; i < triggers.length; i++) {
+    if (triggers[i] !== val) next.push(triggers[i]);
+  }
+  triggers = next;
+  saveData();
+  renderTriggers();
+  renderMovies();
+}
+
+function renderTriggers() {
+  var list = document.getElementById("trigger-list");
+  list.innerHTML = "";
+  for (var i = 0; i < triggers.length; i++) {
+    var item = document.createElement("div");
+    item.className = "trigger-item";
+    var txt = document.createTextNode(triggers[i] + " ");
+    var btn = document.createElement("button");
+    btn.textContent = "x";
+    (function(v) {
+      btn.onclick = function() { removeTrigger(v); };
+    })(triggers[i]);
+    item.appendChild(txt);
+    item.appendChild(btn);
+    list.appendChild(item);
+  }
+}
+
+function getFilteredMovies() {
+  var status = document.getElementById("filter-status").value;
+  var genre = document.getElementById("filter-genre").value;
+  var disturb = document.getElementById("filter-disturb").value;
+  var search = document.getElementById("filter-search").value.toLowerCase().trim();
+  var sort = document.getElementById("sort-by").value;
+  var result = [];
+  for (var i = 0; i < movies.length; i++) {
+    var m = movies[i];
+    if (status !== "all" && m.status !== status) continue;
+    if (genre !== "all" && m.genre !== genre) continue;
+    if (disturb !== "all" && String(m.disturb) !== disturb) continue;
+    if (search) {
+      var hay = ((m.title || "") + " " + (m.genre || "") + " " + (m.notes || "")).toLowerCase();
+      if (hay.indexOf(search) === -1) continue;
+    }
+    result.push(m);
+  }
+  result.sort(function(a, b) {
+    if (sort === "disturb-desc") return (b.disturb || 0) - (a.disturb || 0);
+    if (sort === "disturb-asc") return (a.disturb || 0) - (b.disturb || 0);
+    if (sort === "title") return (a.title || "").localeCompare(b.title || "");
+    if (sort === "year-desc") return (b.year || 0) - (a.year || 0);
+    if (sort === "year-asc") return (a.year || 9999) - (b.year || 9999);
+    if (sort === "rating-desc") return (b.rating || "").localeCompare(a.rating || "");
+    return (b.added || 0) - (a.added || 0);
+  });
+  return result;
+}
+
+function hasTrigger(movie) {
+  if (!movie.tags || triggers.length === 0) return false;
+  for (var i = 0; i < movie.tags.length; i++) {
+    if (triggers.indexOf(movie.tags[i]) !== -1) return true;
+  }
+  return false;
+}
+
+function renderMovies() {
+  var grid = document.getElementById("movie-grid");
+  var list = getFilteredMovies();
+  if (list.length === 0) {
+    grid.innerHTML = "<div id=\"empty-state\"><h2>No movies found</h2><p>Add one or adjust your filters.</p></div>";
+    return;
+  }
+  grid.innerHTML = "";
+  for (var i = 0; i < list.length; i++) {
+    var m = list[i];
+    var card = document.createElement("div");
+    card.className = "movie-card";
+    var inner = "";
+    inner += "<div class=\"card-header\">";
+    inner += "<div class=\"card-title\">" + (m.title || "Untitled") + "</div>";
+    if (m.year) inner += "<div class=\"card-year\">" + m.year + "</div>";
+    inner += "</div>";
+    if (m.genre) inner += "<div class=\"card-genre\">" + m.genre + "</div>";
+    inner += "<div class=\"card-meta\">";
+    if (m.rating) inner += "<span class=\"card-rating\">" + m.rating + "</span>";
+    var statusLabel = m.status === "watched" ? "Watched" : m.status === "want" ? "Want to Watch" : "Skip";
+    inner += "<span class=\"card-status " + (m.status || "") + "\">" + statusLabel + "</span>";
+    inner += "</div>";
+    if (m.disturb) {
+      inner += "<div class=\"disturb-level-display disturb-" + m.disturb + "\">Level " + m.disturb + " &mdash; " + DISTURB_LABELS[m.disturb] + "</div>";
+    }
+    if (m.tags && m.tags.length > 0) {
+      inner += "<div class=\"card-tags\">";
+      for (var t = 0; t < m.tags.length; t++) {
+        inner += "<span class=\"tag\">" + m.tags[t] + "</span>";
+      }
+      inner += "</div>";
+    }
+    if (hasTrigger(m)) {
+      inner += "<div class=\"trigger-warning\">&#9888; Contains your trigger warnings</div>";
+    }
+    if (m.notes) inner += "<div class=\"card-notes\">" + m.notes + "</div>";
+    inner += "<div class=\"card-actions\">";
+    inner += "<button class=\"btn-secondary\" onclick=\"openModal('" + m.id + "')\">Edit</button>";
+    inner += "<button class=\"btn-danger\" onclick=\"deleteMovie('" + m.id + "')\">Delete</button>";
+    inner += "</div>";
+    card.innerHTML = inner;
+    grid.appendChild(card);
+  }
+}
+
+function updateStats() {
+  var watched = 0, want = 0, disturbSum = 0, disturbCount = 0;
+  var tagCounts = {};
+  for (var i = 0; i < movies.length; i++) {
+    var m = movies[i];
+    if (m.status === "watched") watched++;
+    if (m.status === "want") want++;
+    if (m.disturb) { disturbSum += m.disturb; disturbCount++; }
+    if (m.tags) {
+      for (var j = 0; j < m.tags.length; j++) {
+        tagCounts[m.tags[j]] = (tagCounts[m.tags[j]] || 0) + 1;
+      }
+    }
+  }
+  var topTag = "-", topCount = 0;
+  for (var tag in tagCounts) {
+    if (tagCounts[tag] > topCount) { topCount = tagCounts[tag]; topTag = tag; }
+  }
+  document.getElementById("stat-total").textContent = movies.length;
+  document.getElementById("stat-watched").textContent = watched;
+  document.getElementById("stat-want").textContent = want;
+  document.getElementById("stat-disturb").textContent = disturbCount ? (disturbSum / disturbCount).toFixed(1) : "-";
+  document.getElementById("stat-tag").textContent = topTag;
+}
+
+function updateGenreFilter() {
+  var genres = {};
+  for (var i = 0; i < movies.length; i++) {
+    if (movies[i].genre) genres[movies[i].genre] = true;
+  }
+  var sel = document.getElementById("filter-genre");
+  var cur = sel.value;
+  sel.innerHTML = "<option value=\"all\">All Genres</option>";
+  for (var g in genres) {
+    var opt = document.createElement("option");
+    opt.value = g;
+    opt.textContent = g;
+    if (g === cur) opt.selected = true;
+    sel.appendChild(opt);
+  }
+}
+
+function renderAll() {
+  updateGenreFilter();
+  updateStats();
+  renderMovies();
+}
+
+document.getElementById("filter-status").onchange = renderAll;
+document.getElementById("filter-genre").onchange = renderAll;
+document.getElementById("filter-disturb").onchange = renderAll;
+document.getElementById("sort-by").onchange = renderAll;
+document.getElementById("filter-search").oninput = renderAll;
+document.getElementById("trigger-input").onkeydown = function(e) {
+  if (e.key === "Enter") addTrigger();
+};
+
+loadData();
+buildTagSections();
+renderTriggers();
+renderAll();
+</script>
+</body>
+</html>
