@@ -1,670 +1,742 @@
- <!DOCTYPE html>                                                                 
+<!DOCTYPE html>                                                                 
   <html lang="en">                                                                
   <head>                                                                          
-    <meta charset="UTF-8" />                                                      
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />      
-    <title>Elizabeth's Disturbing Movie Habit</title>                             
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600
-  ;700&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet" />
-    <style>                                                                       
-      * { box-sizing: border-box; margin: 0; padding: 0; }
-      body { background-color: #111111; color: #f0eaea; font-family: 'Lora',      
-  Georgia, serif; font-size: 16px; min-height: 100vh; }     
-      header { background: linear-gradient(180deg, #1c1c1c 0%, #111111 100%);     
-  border-bottom: 2px solid #c0282a; padding: 2rem 2rem 1.5rem; text-align: center;
-   }                                                                              
-      header h1 { font-family: 'Playfair Display', Georgia, serif; font-size:     
-  2.6rem; font-weight: 700; color: #ffffff; letter-spacing: 0.02em; text-shadow: 0
-   2px 24px rgba(192,40,42,0.6), 0 0 60px rgba(192,40,42,0.2); }
-      header p.tagline { color: #c0282a; font-style: italic; margin-top: 0.5rem;  
-  font-size: 1rem; letter-spacing: 0.1em; }                                       
-      .stats-bar { display: flex; justify-content: center; gap: 2.5rem;
-  background: #0d0d0d; border-bottom: 1px solid #2a2a2a; padding: 1rem 2rem;      
-  flex-wrap: wrap; }                                                              
-      .stat { text-align: center; }
-      .stat-value { font-family: 'Playfair Display', Georgia, serif; font-size:   
-  1.8rem; color: #c0282a; }                                 
-      .stat-label { font-size: 0.72rem; text-transform: uppercase; letter-spacing:
-   0.12em; color: #888; margin-top: 0.15rem; }                                    
-      .toolbar { display: flex; align-items: center; gap: 1rem; padding: 1.25rem  
-  2rem; background: #161616; border-bottom: 1px solid #262626; flex-wrap: wrap; } 
-      .toolbar label { font-size: 0.82rem; color: #aaa; text-transform: uppercase;
-   letter-spacing: 0.08em; }                                
-      .toolbar select { background: #1e1e1e; color: #f0eaea; border: 1px solid    
-  #3a3a3a; border-radius: 4px; padding: 0.4rem 0.75rem; font-family: 'Lora',
-  Georgia, serif; font-size: 0.9rem; cursor: pointer; }                           
-      .toolbar select:focus { outline: none; border-color: #c0282a; }
-      .spacer { flex: 1; }                                                        
-      .btn-add { background: #c0282a; color: #ffffff; border: none; border-radius:
-   6px; padding: 0.55rem 1.4rem; font-family: 'Lora', Georgia, serif; font-size:  
-  0.95rem; font-weight: bold; cursor: pointer; letter-spacing: 0.06em; transition:
-   background 0.2s; }
-      .btn-add:hover { background: #d93535; }                                     
-      .grid { display: grid; grid-template-columns: repeat(auto-fill,
-  minmax(280px, 1fr)); gap: 1.5rem; padding: 2rem; }                              
-      .empty-state { grid-column: 1 / -1; text-align: center; color: #555;
-  padding: 4rem 1rem; font-size: 1.1rem; font-style: italic; }                    
-      .card { background: #1a1a1a; border: 1px solid #2e2e2e; border-radius: 10px;
-   padding: 1.25rem 1.4rem 1rem; display: flex; flex-direction: column; gap:      
-  0.65rem; position: relative; transition: transform 0.15s, box-shadow 0.15s; }   
-      .card:hover { transform: translateY(-3px); box-shadow: 0 8px 32px
-  rgba(192,40,42,0.2); border-color: #4a2020; }                                   
-      .card-header { display: flex; justify-content: space-between; align-items:
-  flex-start; gap: 0.5rem; }                                                      
-      .card-title { font-family: 'Lora', Georgia, serif; font-size: 1.1rem;       
-  font-weight: bold; color: #ffffff; line-height: 1.3; }
-      .card-year { font-size: 0.8rem; color: #888; white-space: nowrap;           
-  margin-top: 0.15rem; font-style: italic; }                
-      .card-meta { display: flex; align-items: center; gap: 0.6rem; flex-wrap:    
-  wrap; }                                                   
-      .badge { font-size: 0.7rem; text-transform: uppercase; letter-spacing:      
-  0.07em; border-radius: 4px; padding: 0.2rem 0.55rem; font-weight: bold;
-  font-family: 'Lora', Georgia, serif; }                                          
-      .badge-genre { background: #222; color: #ccc; border: 1px solid #3a3a3a; }
-      .badge-watched { background: #1e0e0e; color: #e05555; border: 1px solid     
-  #5a2020; }                                                
-      .badge-want { background: #1e1e1e; color: #c0282a; border: 1px solid        
-  #4a2020; }                                                                      
-      .stars { color: #c0282a; font-size: 1rem; letter-spacing: 0.05em; }         
-      .stars .empty { color: #333; }                                              
-      .card-note { font-size: 0.88rem; color: #aaa; font-style: italic;           
-  line-height: 1.6; border-top: 1px solid #282828; padding-top: 0.6rem; }
-      .card-actions { display: flex; gap: 0.5rem; justify-content: flex-end;      
-  margin-top: 0.25rem; }                                    
-      .btn-sm { background: none; border: 1px solid #333; border-radius: 4px;     
-  color: #888; font-family: 'Lora', Georgia, serif; font-size: 0.75rem; padding:
-  0.25rem 0.65rem; cursor: pointer; transition: color 0.15s, border-color 0.15s; }
-      .btn-sm:hover { color: #f0eaea; border-color: #888; } 
-      .btn-sm.danger:hover { color: #e05555; border-color: #e05555; }             
-      .modal-overlay { display: none; position: fixed; inset: 0; background:
-  rgba(0,0,0,0.88); z-index: 100; align-items: center; justify-content: center;   
-  padding: 1rem; }                                                                
-      .modal-overlay.open { display: flex; }
-      .modal { background: #1a1a1a; border: 1px solid #3a3a3a; border-radius:     
-  12px; padding: 2rem; width: 100%; max-width: 480px; max-height: 90vh;
-  overflow-y: auto; }                                                             
-      .modal h2 { font-family: 'Playfair Display', Georgia, serif; font-size:     
-  1.4rem; color: #ffffff; margin-bottom: 1.5rem; border-bottom: 1px solid #c0282a;
-   padding-bottom: 0.6rem; }                                                      
-      .form-group { margin-bottom: 1.1rem; }                                      
-      .form-group label { display: block; font-size: 0.85rem; color: #aaa;        
-  text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.35rem; }
-      .form-group input, .form-group select, .form-group textarea { width: 100%;  
-  background: #111; color: #f0eaea; border: 1px solid #333; border-radius: 6px;
-  padding: 0.55rem 0.8rem; font-size: 0.95rem; font-family: 'Lora', Georgia,      
-  serif; transition: border-color 0.2s; }
-      .form-group input:focus, .form-group select:focus, .form-group              
-  textarea:focus { outline: none; border-color: #c0282a; }  
-      .form-group textarea { resize: vertical; min-height: 80px; }                
-      .star-input { display: flex; gap: 0.3rem; font-size: 1.6rem; }
-      .star-input span { cursor: pointer; color: #333; transition: color 0.1s;
-  user-select: none; }                        
-      .star-input span.on { color: #c0282a; }                                     
-      .form-actions { display: flex; gap: 0.75rem; justify-content: flex-end;     
-  margin-top: 1.5rem; }                                                           
-      .btn-cancel { background: none; border: 1px solid #444; color: #aaa;        
-  border-radius: 6px; padding: 0.5rem 1.2rem; font-family: 'Lora', Georgia, serif;
-   font-size: 0.9rem; cursor: pointer; transition: border-color 0.2s, color 0.2s; 
-  }                                                                               
-      .btn-cancel:hover { border-color: #c0282a; color: #f0eaea; }                
-      .btn-save { background: #c0282a; color: #ffffff; border: none;
-  border-radius: 6px; padding: 0.5rem 1.4rem; font-family: 'Lora', Georgia, serif;
-   font-size: 0.9rem; font-weight: bold; cursor: pointer; transition: background
-  0.2s; }                                                                         
-      .btn-save:hover { background: #d93535; }                                    
-      .disturb-tag-section { margin-bottom: 0.75rem; }                            
-      .disturb-tag-section-label { font-size: 0.75rem; text-transform: uppercase; 
-  letter-spacing: 0.1em; color: #c0282a; margin-bottom: 0.4rem; padding-bottom:
-  0.2rem; border-bottom: 1px solid #2a2a2a; }                                     
-      .disturb-tag-grid { display: flex; flex-wrap: wrap; gap: 0.4rem; }          
-      .disturb-tag-btn { background: #1a1a1a; border: 1px solid #3a3a3a;          
-  border-radius: 20px; color: #888; font-family: 'Lora', Georgia, serif;          
-  font-size: 1rem; padding: 0.25rem 0.7rem; cursor: pointer; transition: all      
-  0.15s; user-select: none; }                               
-      .disturb-tag-btn:hover { border-color: #c0282a; color: #f0eaea; }           
-      .disturb-tag-btn.selected { background: #3a0e0e; border-color: #c0282a;
-  color: #f0eaea; }                                                               
-      .disturb-level-picker { display: flex; flex-direction: column; gap: 0.3rem;
-  margin-top: 0.25rem; }                                                          
-      .disturb-level-btn { display: flex; align-items: center; gap: 0.75rem;      
-  width: 100%; background: #1a1a1a; border: 1px solid #3a3a3a; border-radius: 6px;
-   color: #888; font-family: 'Lora', Georgia, serif; font-size: 0.9rem; padding:  
-  0.5rem 0.85rem; cursor: pointer; transition: all 0.15s; text-align: left; }
-      .disturb-level-btn:hover { border-color: #c0282a; color: #f0eaea;           
-  background: #221010; }                                    
-      .disturb-level-btn.selected { background: #3a0e0e; border-color: #c0282a;   
-  color: #ffffff; }                                         
-      .disturb-level-btn .lvl-num { font-family: 'Playfair Display', Georgia,     
-  serif; font-size: 0.85rem; color: #c0282a; min-width: 1.1rem; text-align:
-  center; }                                                                       
-      .disturb-level-btn.selected .lvl-num { color: #ff6666; }
-      .disturb-level-desc { display: none; }                                      
-      .card-disturb { display: flex; align-items: center; gap: 0.6rem; background:
-   #1e0a0a; border: 1px solid #4a1515; border-radius: 6px; padding: 0.5rem        
-  0.75rem; margin: 0.1rem 0; }                              
-      .disturb-skull { color: #c0282a; font-size: 1.1rem; line-height: 1; }       
-      .disturb-level-label { color: #e05555; font-weight: bold; font-family:      
-  'Playfair Display', Georgia, serif; font-size: 1rem; white-space: nowrap; }     
-      .disturb-level-desc-card { color: #b08080; font-style: italic; font-size:   
-  0.9rem; }                                                                       
-      .card-trigger-warning { background: #2a0a0a; border: 1px solid #8b1a1a;     
-  border-radius: 6px; padding: 0.4rem 0.75rem; font-size: 0.82rem; color: #e05555;
-   font-style: italic; }                                                          
-      .card-tags { display: flex; flex-wrap: wrap; gap: 0.35rem; }
-      .tag-pill { background: #2a0a0a; border: 1px solid #4a1515; border-radius:  
-  20px; color: #cc7070; font-size: 0.68rem; padding: 0.15rem 0.55rem; font-style:
-  italic; }                                                                       
-      .trigger-bar { background: #140808; border-bottom: 1px solid #3a1010;
-  padding: 0 2rem; overflow: hidden; max-height: 0; transition: max-height 0.3s   
-  ease, padding 0.3s ease; }              
-      .trigger-bar.open { max-height: 600px; padding: 1.25rem 2rem; }             
-      .trigger-bar-header { display: flex; align-items: center; justify-content:  
-  space-between; margin-bottom: 1rem; }       
-      .trigger-bar-header h3 { font-family: 'Playfair Display', Georgia, serif;   
-  font-size: 1rem; color: #e05555; }                                              
-      .trigger-bar-header p { font-size: 0.85rem; color: #888; font-style: italic;
-   }                                                                              
-      .btn-trigger-toggle { background: none; border: 1px solid #4a1515;          
-  border-radius: 6px; color: #c0282a; font-family: 'Lora', Georgia, serif;
-  font-size: 0.85rem; padding: 0.35rem 0.9rem; cursor: pointer; transition: all   
-  0.15s; white-space: nowrap; }                             
-      .btn-trigger-toggle:hover, .btn-trigger-toggle.active { background: #3a0e0e;
-   border-color: #c0282a; color: #fff; }                    
-      ::-webkit-scrollbar { width: 6px; }                                         
-      ::-webkit-scrollbar-track { background: #111; }       
-      ::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }         
-      ::-webkit-scrollbar-thumb:hover { background: #555; }
-    </style>                                                                      
-  </head>                                                   
+  <meta charset="UTF-8">                                    
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Elizabeth's Disturbing Movie Habit</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>            
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@
+  0,400;0,700;1,400&family=Lora:ital,wght@0,400;0,600;1,400&display=swap"         
+  rel="stylesheet">                                         
+  <style>                                                                         
+  *{box-sizing:border-box;margin:0;padding:0}                                     
+  body{background:#1a1a1a;color:#e8e0d0;font-family:'Lora',Georgia,serif;min-heigh
+  t:100vh;line-height:1.6}                                                        
+  h1,h2,h3,h4{font-family:'Playfair Display',Georgia,serif} 
+  a{color:#cc2200;text-decoration:none}                                           
+  a:hover{color:#ff4422}                                                          
+                                                                                  
+  #app-header{background:#111;border-bottom:2px solid                             
+  #cc2200;padding:2rem;text-align:center}                   
+  #app-header h1{font-size:2.8rem;color:#e8e0d0;letter-spacing:0.05em}            
+  #app-header h1 span{color:#cc2200;font-style:italic}                            
+  #app-header p{color:#888;font-size:1rem;margin-top:0.5rem;font-style:italic}    
+                                                                                  
+  #controls{background:#1f1f1f;border-bottom:1px solid #333;padding:1.2rem        
+  2rem;display:flex;flex-wrap:wrap;gap:1rem;align-items:center;justify-content:spa
+  ce-between}                                                                     
+  .filter-group{display:flex;flex-wrap:wrap;gap:0.5rem;align-items:center}        
+  .filter-group label{color:#999;font-size:0.85rem;margin-right:0.3rem}           
+  select,input[type="text"]{background:#2a2a2a;border:1px solid                   
+  #444;color:#e8e0d0;padding:0.4rem                         
+  0.7rem;border-radius:4px;font-family:'Lora',serif;font-size:0.9rem}             
+  select:focus,input:focus{outline:none;border-color:#cc2200}
+  button{cursor:pointer;font-family:'Lora',serif;border:none;border-radius:4px;pad
+  ding:0.5rem 1.1rem;font-size:0.9rem;transition:background 0.2s}
+  .btn-primary{background:#cc2200;color:#fff}                                     
+  .btn-primary:hover{background:#aa1a00}                    
+  .btn-secondary{background:#333;color:#ccc}                                      
+  .btn-secondary:hover{background:#444}   
+  .btn-danger{background:#550000;color:#ccc}                                      
+  .btn-danger:hover{background:#770000}                                           
+                                          
+  #stats-bar{display:flex;flex-wrap:wrap;gap:1.5rem;padding:1rem                  
+  2rem;background:#161616;border-bottom:1px solid                                 
+  #2a2a2a;font-size:0.85rem;color:#888}
+  #stats-bar span{color:#cc2200;font-weight:600}                                  
+                                                            
+  #movie-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr
+  ));gap:1.5rem;padding:2rem;max-width:1400px;margin:0 auto}
+
+  .movie-card{background:#222;border:1px solid                                    
+  #333;border-radius:8px;padding:1.2rem;position:relative;transition:transform
+  0.2s,border-color 0.2s}                                                         
+  .movie-card:hover{transform:translateY(-3px);border-color:#cc2200}              
+  .card-header{display:flex;justify-content:space-between;align-items:flex-start;m
+  argin-bottom:0.6rem}                                                            
+  .card-title{font-family:'Playfair                         
+  Display',serif;font-size:1.25rem;color:#e8e0d0;flex:1;padding-right:0.5rem}
+  .card-year{color:#888;font-size:0.85rem;white-space:nowrap}                     
+  .card-genre{color:#cc2200;font-size:0.8rem;margin-bottom:0.5rem;text-transform:u
+  ppercase;letter-spacing:0.08em}                                                 
+  .card-meta{display:flex;gap:0.8rem;margin-bottom:0.6rem;flex-wrap:wrap;align-ite
+  ms:center}                                                                      
+  .card-rating{color:#e8c84a;font-size:0.9rem}                                    
+  .card-status{font-size:0.75rem;padding:0.2rem                                   
+  0.5rem;border-radius:3px;background:#333;color:#aaa}                            
+  .card-status.watched{background:#1a3320;color:#5a9;border:1px solid #2a5535}
+  .card-status.want{background:#1a2040;color:#68a;border:1px solid #2a3560}       
+  .card-status.skip{background:#2a2a2a;color:#777;border:1px solid #444}          
+                                                                                  
+  .disturb-level-display{margin:0.5rem 0;padding:0.4rem                           
+  0.6rem;border-radius:4px;font-size:1rem;font-weight:700;letter-spacing:0.03em}  
+  .disturb-1{background:#1a2a1a;color:#5c5;border:1px solid #2a4a2a}              
+  .disturb-2{background:#2a2a1a;color:#bb8;border:1px solid #4a4a2a}              
+  .disturb-3{background:#2a1a1a;color:#c84;border:1px solid #4a2a1a}
+  .disturb-4{background:#2a1515;color:#d55;border:1px solid #5a2020}              
+  .disturb-5{background:#1f0808;color:#f44;border:1px solid #6a1010}              
+                                                                                  
+  .card-tags{display:flex;flex-wrap:wrap;gap:0.3rem;margin:0.5rem 0}              
+  .tag{background:#2a2020;color:#c87878;font-size:0.75rem;padding:0.15rem         
+  0.45rem;border-radius:3px;border:1px solid #442222}                             
+  .card-notes{color:#999;font-size:0.85rem;font-style:italic;margin-top:0.5rem;bor
+  der-top:1px solid #2a2a2a;padding-top:0.5rem}                                   
+  .card-actions{display:flex;gap:0.4rem;margin-top:0.8rem}                        
+  .card-actions button{font-size:0.75rem;padding:0.25rem 0.6rem}
+                                                                                  
+  .trigger-warning{background:#1f0a0a;border:1px solid      
+  #550000;border-radius:4px;padding:0.3rem                                        
+  0.6rem;margin-top:0.4rem;font-size:0.75rem;color:#c06060}                       
+                                                                                  
+  #modal-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;b
+  ackground:rgba(0,0,0,0.85);z-index:1000;overflow-y:auto}                        
+  #modal-overlay.open{display:flex;align-items:flex-start;justify-content:center;p
+  adding:2rem 1rem}                                                               
+  #modal-box{background:#1e1e1e;border:1px solid
+  #444;border-radius:10px;width:100%;max-width:700px;padding:2rem;margin:auto}    
+  #modal-box h2{font-family:'Playfair                                             
+  Display',serif;color:#e8e0d0;margin-bottom:1.5rem;font-size:1.8rem}
+                                                                                  
+  .form-group{margin-bottom:1.2rem}                         
+  .form-group                                                                     
+  label{display:block;color:#bbb;font-size:0.95rem;margin-bottom:0.4rem}
+  .form-group input,.form-group select,.form-group                                
+  textarea{width:100%;background:#2a2a2a;border:1px solid   
+  #444;color:#e8e0d0;padding:0.6rem                                               
+  0.8rem;border-radius:4px;font-family:'Lora',serif;font-size:0.95rem}
+  .form-group textarea{height:80px;resize:vertical}                               
+  .form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+                                                                                  
+  .disturb-picker{display:flex;flex-direction:column;gap:0.4rem;margin-top:0.4rem}
+  .disturb-option{display:flex;align-items:center;cursor:pointer;padding:0.35rem
+  0.5rem;border-radius:4px;border:2px solid transparent;transition:all 0.15s}     
+  .disturb-option:hover{background:#2a2020}                                       
+  .disturb-option input[type="radio"]{margin-right:0.6rem;accent-color:#cc2200}   
+  .disturb-option-bar{flex:1;height:28px;border-radius:4px;display:flex;align-item
+  s:center;padding:0 0.7rem;font-size:0.95rem;font-weight:600;letter-spacing:0.02e
+  m;transition:opacity 0.15s}                                                     
+  .disturb-option.selected{border-color:#cc2200}            
+  .bar-1{background:#1a3a1a;color:#6d6}                                           
+  .bar-2{background:#2a2a1a;color:#cc8}                     
+  .bar-3{background:#3a2010;color:#c84}                                           
+  .bar-4{background:#3a1515;color:#d55}                     
+  .bar-5{background:#2a0808;color:#f44}                                           
+                                                                                  
+  .tag-section-title{color:#cc2200;font-size:1rem;font-weight:700;margin:0.8rem 0 
+  0.4rem;letter-spacing:0.05em;text-transform:uppercase;font-family:'Playfair     
+  Display',serif}                                           
+  .tags-grid{display:flex;flex-wrap:wrap;gap:0.4rem;margin-bottom:0.5rem}         
+  .tag-checkbox{display:inline-flex;align-items:center;gap:0.3rem;background:#2525
+  25;border:1px solid #3a3a3a;border-radius:4px;padding:0.3rem                    
+  0.6rem;cursor:pointer;font-size:0.9rem;color:#ccc;transition:all 0.15s}
+  .tag-checkbox:hover{border-color:#cc2200;color:#e8e0d0}                         
+  .tag-checkbox input{accent-color:#cc2200}                                       
+  .tag-checkbox.checked{background:#2a1515;border-color:#cc2200;color:#e8c0c0}    
+                                                                                  
+  .modal-actions{display:flex;gap:0.8rem;justify-content:flex-end;margin-top:1.5re
+  m;border-top:1px solid #333;padding-top:1.2rem}
+                                                                                  
+  #trigger-panel{background:#1a1212;border-top:1px solid #3a2020;padding:1.5rem   
+  2rem}                                                                           
+  #trigger-panel h2{font-family:'Playfair                                         
+  Display',serif;color:#cc2200;margin-bottom:1rem;font-size:1.4rem}               
+  .trigger-input-row{display:flex;gap:0.5rem;margin-bottom:1rem}
+  .trigger-input-row input{flex:1;background:#252525;border:1px solid             
+  #444;color:#e8e0d0;padding:0.5rem                                               
+  0.7rem;border-radius:4px;font-family:'Lora',serif;font-size:0.9rem}
+  .trigger-list{display:flex;flex-wrap:wrap;gap:0.5rem}                           
+  .trigger-item{background:#2a1515;border:1px solid                               
+  #552222;color:#d08080;font-size:0.85rem;padding:0.3rem                          
+  0.7rem;border-radius:4px;display:flex;align-items:center;gap:0.4rem}            
+  .trigger-item button{background:none;border:none;color:#995555;cursor:pointer;fo
+  nt-size:0.85rem;padding:0;line-height:1}                                        
+  .trigger-item button:hover{color:#ff4444}
+                                                                                  
+  #empty-state{text-align:center;padding:4rem 2rem;color:#555}                    
+  #empty-state h2{font-family:'Playfair   
+  Display',serif;font-size:2rem;color:#444;margin-bottom:0.5rem}                  
+  </style>                                                                        
+  </head>                                                                         
   <body>                                                                          
                                                             
-    <header>                                                                      
-      <h1>Elizabeth's Disturbing Movie Habit &#127916;</h1> 
-      <p class="tagline">A personal cinema journal</p>
-    </header>                                                                     
+  <div id="app-header">                                                           
+    <h1>Elizabeth&#39;s <span>Disturbing</span> Movie Habit</h1>
+    <p>a curated collection of cinematic unease</p>
+  </div>                                      
                                           
-    <div class="stats-bar">                                                       
-      <div class="stat"><div class="stat-value" id="stat-total">0</div><div       
-  class="stat-label">Total Tracked</div></div>
-      <div class="stat"><div class="stat-value" id="stat-watched">0</div><div     
-  class="stat-label">Watched</div></div>                    
-      <div class="stat"><div class="stat-value" id="stat-want">0</div><div        
-  class="stat-label">Want to Watch</div></div>
-      <div class="stat"><div class="stat-value" id="stat-avg">&#8212;</div><div   
-  class="stat-label">Avg Rating</div></div>                 
-    </div>                                                                        
-                                                            
-    <div class="toolbar">                                                         
-      <label for="filter-status">Status:</label>            
+  <div id="controls">                                                             
+    <div class="filter-group">                                                    
+      <label>Status:</label>                                                      
       <select id="filter-status">                                                 
         <option value="all">All</option>                    
-        <option value="Want to Watch">Want to Watch</option>
-        <option value="Watched">Watched</option>                                  
-      </select>                           
-      <label for="filter-genre">Genre:</label>                                    
-      <select id="filter-genre"><option value="all">All Genres</option></select>  
-      <label for="filter-level">Disturbance:</label>
-      <select id="filter-level">                                                  
-        <option value="all">All Levels</option>             
-        <option value="1">Level 1 - safe for normies</option>                     
-        <option value="2">Level 2 - horror fans only</option>                     
-        <option value="3">Level 3 - ruining the party</option>                    
-        <option value="4">Level 4 - disturbia freaks</option>                     
-        <option value="5">Level 5 - medical attention</option>                    
-      </select>                               
-      <label for="sort-by">Sort:</label>                                          
-      <select id="sort-by">                                 
-        <option value="added">Date Added</option>                                 
-        <option value="disturb-asc">Disturbing up</option>  
-        <option value="disturb-desc">Disturbing down</option>                     
-        <option value="rating-desc">Rating down</option>    
-        <option value="title-asc">Title A-Z</option>                              
+        <option value="watched">Watched</option>
+        <option value="want">Want to Watch</option>
+        <option value="skip">Skip</option>
       </select>                                                                   
-      <div class="spacer"></div>                                                  
-      <button class="btn-trigger-toggle" id="btn-triggers"                        
-  onclick="toggleTriggerPanel()">&#9888; My Triggers</button>                     
-      <button class="btn-add" onclick="openModal()">+ Add Movie</button>
+      <label>Genre:</label>
+      <select id="filter-genre">                                                  
+        <option value="all">All Genres</option>             
+      </select>
+      <label>Disturb Level:</label>                                               
+      <select id="filter-disturb">
+        <option value="all">Any Level</option>                                    
+        <option value="1">1 - Safe for Normies</option>     
+        <option value="2">2 - Horror Fans Only</option>
+        <option value="3">3 - Party Ruiner</option>                               
+        <option value="4">4 - True Freaks</option>
+        <option value="5">5 - Medical Attention</option>                          
+      </select>                                             
+      <label>Sort:</label>                                                        
+      <select id="sort-by">                                 
+        <option value="added">Recently Added</option>                             
+        <option value="disturb-desc">Most Disturbing</option>
+        <option value="disturb-asc">Least Disturbing</option>                     
+        <option value="title">Title A-Z</option>
+        <option value="year-desc">Newest Film</option>                            
+        <option value="year-asc">Oldest Film</option>                             
+        <option value="rating-desc">Highest Rated</option>
+      </select>                                                                   
+      <input type="text" id="filter-search" placeholder="Search..." 
+  style="width:140px">                                                            
     </div>                                                                        
+    <button class="btn-primary" onclick="openModal()">+ Add Movie</button>
+  </div>                                                                          
+                                                            
+  <div id="stats-bar">
+    <div>Total: <span id="stat-total">0</span></div>                              
+    <div>Watched: <span id="stat-watched">0</span></div>
+    <div>Want to Watch: <span id="stat-want">0</span></div>                       
+    <div>Avg Disturb Level: <span id="stat-disturb">-</span></div>
+    <div>Most Common Tag: <span id="stat-tag">-</span></div>                      
+  </div>                                      
                                                                                   
-    <div class="trigger-bar" id="trigger-bar">
-      <div class="trigger-bar-header">                                            
-        <div>                                               
-          <h3>My Do Not Want To See Triggers</h3>                                 
-          <p>Movies containing these tags will show a warning.</p>
+  <div id="movie-grid"></div>                               
+                                                                                  
+  <div id="trigger-panel">                                  
+    <h2>My Trigger Warnings</h2>                                                  
+    <p style="color:#888;font-size:0.85rem;margin-bottom:0.8rem">Movies containing
+   these tags will show a warning on their card.</p>
+    <div class="trigger-input-row">       
+      <input type="text" id="trigger-input" placeholder="Add a trigger (e.g.      
+  animal harm)">                                                                  
+      <button class="btn-secondary" onclick="addTrigger()">Add</button>           
+    </div>                                                                        
+    <div class="trigger-list" id="trigger-list"></div>                            
+  </div>
+                                                                                  
+  <div id="modal-overlay" onclick="overlayClick(event)">    
+    <div id="modal-box">
+      <h2 id="modal-title">Add a Movie</h2>                                       
+      <div class="form-row">                  
+        <div class="form-group">                                                  
+          <label>Title *</label>                            
+          <input type="text" id="f-title" placeholder="Film title">               
+        </div>                                
+        <div class="form-group">                                                  
+          <label>Year</label>                               
+          <input type="number" id="f-year" placeholder="2024" min="1888"          
+  max="2099">                                 
         </div>                                                                    
       </div>                                                
-      <div id="trigger-tag-grid"></div>                                           
-    </div>                                                                        
+      <div class="form-row">                                                      
+        <div class="form-group">
+          <label>Genre</label>                                                    
+          <input type="text" id="f-genre" placeholder="Horror, Drama, 
+  Thriller...">                           
+        </div>
+        <div class="form-group">                                                  
+          <label>Your Rating</label>          
+          <select id="f-rating">                                                  
+            <option value="">-- no rating --</option>       
+            <option value="5 stars">5 stars</option>                              
+            <option value="4 stars">4 stars</option>
+            <option value="3 stars">3 stars</option>                              
+            <option value="2 stars">2 stars</option>        
+            <option value="1 star">1 star</option>                                
+          </select>                       
+        </div>                                                                    
+      </div>                                                                      
+      <div class="form-group">
+        <label>Status</label>                                                     
+        <select id="f-status">                              
+          <option value="watched">Watched</option>
+          <option value="want">Want to Watch</option>
+          <option value="skip">Skip</option>
+        </select>                                                                 
+      </div>
                                                                                   
-    <div class="grid" id="movie-grid"></div>                                      
-                                                                                  
-    <div class="modal-overlay" id="modal-overlay">
-      <div class="modal">                                                         
-        <h2 id="modal-title">Add Movie</h2>                 
-        <form id="movie-form" onsubmit="saveMovie(event)">                        
-          <input type="hidden" id="edit-id" />
-          <div class="form-group">                                                
-            <label for="input-title">Title *</label>        
-            <input type="text" id="input-title" placeholder="e.g. Hereditary"     
-  required />                             
-          </div>                                                                  
-          <div class="form-group">                                                
-            <label for="input-year">Year</label>
-            <input type="number" id="input-year" placeholder="e.g. 2018"          
-  min="1888" max="2099" />                                                        
-          </div>                          
-          <div class="form-group">                                                
-            <label for="input-genre">Genre</label>                                
-            <select id="input-genre">         
-              <option value="">-- Select --</option>                              
+      <div class="form-group">                              
+        <label>Disturbance Level</label>
+        <div class="disturb-picker" id="disturb-picker">                          
+          <label class="disturb-option" id="dlabel-1">
+            <input type="radio" name="disturb" value="1"                          
+  onchange="selectDisturb(1)">                              
+            <div class="disturb-option-bar bar-1">1 &mdash; safe for normies</div>
+          </label>                                                                
+          <label class="disturb-option" id="dlabel-2">                            
+            <input type="radio" name="disturb" value="2"                          
+  onchange="selectDisturb(2)">                                                    
+            <div class="disturb-option-bar bar-2">2 &mdash; only if you actually  
+  like horror movies</div>                                                        
+          </label>                                                                
+          <label class="disturb-option" id="dlabel-3">      
+            <input type="radio" name="disturb" value="3"                          
+  onchange="selectDisturb(3)">            
+            <div class="disturb-option-bar bar-3">3 &mdash; now you are ruining   
+  the party for everyone</div>                                                    
+          </label>                        
+          <label class="disturb-option" id="dlabel-4">                            
+            <input type="radio" name="disturb" value="4"                          
+  onchange="selectDisturb(4)">                
+            <div class="disturb-option-bar bar-4">4 &mdash; only for true         
+  disturbia freaks</div>                                    
+          </label>                                                                
+          <label class="disturb-option" id="dlabel-5">
+            <input type="radio" name="disturb" value="5"                          
+  onchange="selectDisturb(5)">                              
+            <div class="disturb-option-bar bar-5">5 &mdash; you may need medical  
+  attention</div>                                           
+          </label>                                                                
+        </div>
+      </div>                                                                      
                                                             
-  <option>Action</option><option>Adventure</option><option>Animation</option>     
-                                          
-  <option>Comedy</option><option>Crime</option><option>Documentary</option>       
+      <div class="form-group">            
+        <label>Disturbing Qualities</label>
                                                                                   
-  <option>Drama</option><option>Fantasy</option><option>Horror</option>
+        <div class="tag-section-title">Violence &amp; Harm</div>
+        <div class="tags-grid" id="tags-violence"></div>                          
+                                                            
+        <div class="tag-section-title">Psychological</div>                        
+        <div class="tags-grid" id="tags-psychological"></div>
                                                                                   
-  <option>Musical</option><option>Mystery</option><option>Romance</option>
+        <div class="tag-section-title">Emotional</div>                            
+        <div class="tags-grid" id="tags-emotional"></div>
                                                                                   
-  <option>Sci-Fi</option><option>Thriller</option><option>Western</option>
-              <option>Other</option>                                              
-            </select>                                       
-          </div>                                                                  
-          <div class="form-group">
-            <label>Star Rating</label>                                            
-            <div class="star-input" id="star-input">        
-              <span data-val="1">&#9733;</span>
-              <span data-val="2">&#9733;</span>
-              <span data-val="3">&#9733;</span>                                   
-              <span data-val="4">&#9733;</span>
-              <span data-val="5">&#9733;</span>                                   
-            </div>                                          
-            <input type="hidden" id="input-rating" value="0" />                   
-          </div>                                                                  
-          <div class="form-group">
-            <label>Disturbance Level</label>                                      
-            <div class="disturb-level-picker" id="disturb-level-picker">
-              <button type="button" class="disturb-level-btn" data-level="1"><span
-   class="lvl-num">1</span> safe for normies</button>                             
-              <button type="button" class="disturb-level-btn" data-level="2"><span
-   class="lvl-num">2</span> only if you actually like horror movies</button>      
-              <button type="button" class="disturb-level-btn" data-level="3"><span
-   class="lvl-num">3</span> now you are ruining the party for everyone</button>   
-              <button type="button" class="disturb-level-btn" data-level="4"><span
-   class="lvl-num">4</span> only for true disturbia freaks</button>
-              <button type="button" class="disturb-level-btn" data-level="5"><span
-   class="lvl-num">5</span> you may need medical attention</button>
-            </div>                                                                
-            <div class="disturb-level-desc" id="disturb-level-desc"></div>
-            <input type="hidden" id="input-disturb-level" value="0" />            
-          </div>                                            
-          <div class="form-group">                                                
-            <label>Why It is Disturbing</label>             
-            <div id="disturb-tag-grid"></div>                                     
-            <input type="hidden" id="input-disturb-tags" value="[]" />
-          </div>                                                                  
-          <div class="form-group">                                                
-            <label for="input-status">Status *</label>
-            <select id="input-status" required>                                   
-              <option value="Want to Watch">Want to Watch</option>
-              <option value="Watched">Watched</option>                            
-            </select>                                                             
-          </div>                          
-          <div class="form-group">                                                
-            <label for="input-note">Note / Review</label>                         
-            <textarea id="input-note" placeholder="Your thoughts, quotes, or 
-  reasons to watch..."></textarea>                                                
-          </div>                                            
-          <div class="form-actions">                                              
-            <button type="button" class="btn-cancel" 
-  onclick="closeModal()">Cancel</button>                                          
-            <button type="submit" class="btn-save">Save</button>                  
-          </div>                              
-        </form>                                                                   
+        <div class="tag-section-title">Social &amp; Cultural</div>                
+        <div class="tags-grid" id="tags-social"></div>
+      </div>                                                                      
+                                                            
+      <div class="form-group">
+        <label>Notes</label>                                                      
+        <textarea id="f-notes" placeholder="Your thoughts, warnings for 
+  others..."></textarea>                                                          
       </div>                                                
-    </div>                                                                        
-   
-    <script>                                                                      
-      var STORAGE_KEY = 'mes-movie-list';                   
-      var TRIGGERS_KEY = 'mes-movie-triggers';
-                                          
-      var DISTURB_LEVELS = [                  
-        '',                                                                       
-        'safe for normies',
-        'only if you actually like horror movies',                                
-        'now you are ruining the party for everyone',       
-        'only for true disturbia freaks',                                         
-        'you may need medical attention'                    
-      ];                                  
 
-      var DISTURB_TAG_GROUPS = {                                                  
-        'Violence & Harm': ['violent','sexual violence','body horror','disturbing 
+      <div class="modal-actions">                                                 
+        <button class="btn-secondary" onclick="closeModal()">Cancel</button>
+        <button class="btn-primary" onclick="saveMovie()">Save Movie</button>     
+      </div>                                                
+    </div>
+  </div>                                                                          
+   
+  <script>                                                                        
+  var DISTURB_LABELS = [                                    
+    '',                                       
+    'safe for normies',                   
+    'only if you actually like horror movies',
+    'now you are ruining the party for everyone',                                 
+    'only for true disturbia freaks',
+    'you may need medical attention'                                              
+  ];                                                        
+
+  var TAG_GROUPS = {                                                              
+    'violence': ['violent','sexual violence','body horror','disturbing 
   visuals','animal harm','child in peril','hostage','jump scares'],               
-        'Psychological': ['descent into madness','psychological torture','not 
-  being believed','gaslighting','too close to home','realistic','existential 
-  dread'],                                                                        
-        'Emotional': ['made me sad','grief','traumy mommy','rug pulls','no 
-  redemption arc'],                                                               
-        'Social & Cultural': ['cults','taboo relationships','weird sex 
-  stuff','based on true events','religious horror','cosmic horror']               
-      };                                                                          
-   
-      var ALL_DISTURB_TAGS =                                                      
-  Object.values(DISTURB_TAG_GROUPS).reduce(function(a,b){ return a.concat(b); },
-  []);                                                                            
-                                                                                  
-      var movies = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
-      var myTriggers = new Set(JSON.parse(localStorage.getItem(TRIGGERS_KEY) ||   
-  '[]'));                                                   
-      var editingId = null;                                                       
-      var selectedRating = 0;
-      var selectedDisturbLevel = 0;                                               
-      var selectedTags = new Set();                         
-                                                                                  
-      function save() { localStorage.setItem(STORAGE_KEY, JSON.stringify(movies));
-   }                                                                              
-      function saveTriggers() { localStorage.setItem(TRIGGERS_KEY,
-  JSON.stringify(Array.from(myTriggers))); }                                      
+    'psychological': ['descent into madness','psychological torture','not being 
+  believed','gaslighting','too close to home','realistic','existential dread'],
+    'emotional': ['made me sad','grief','traumy mommy','rug pulls','no redemption 
+  arc'],                                      
+    'social': ['cults','taboo relationships','weird sex stuff','based on true     
+  events','religious horror','cosmic horror']               
+  };                                                                              
                                                             
-      function render() {                                                         
-        var statusFilter = document.getElementById('filter-status').value;        
-        var genreFilter  = document.getElementById('filter-genre').value;
-        var levelFilter  = document.getElementById('filter-level').value;         
-        var sortBy       = document.getElementById('sort-by').value;
+  var movies = [];                                                                
+  var triggers = [];                                        
+  var editingId = null;                                                           
+                                                            
+  function loadData() {                   
+    var m = localStorage.getItem('mes-movie-list');
+    var t = localStorage.getItem('mes-movie-triggers');                           
+    movies = m ? JSON.parse(m) : [];      
+    triggers = t ? JSON.parse(t) : [];                                            
+  }                                                                               
+   
+  function saveData() {                                                           
+    localStorage.setItem('mes-movie-list', JSON.stringify(movies));
+    localStorage.setItem('mes-movie-triggers', JSON.stringify(triggers));         
+  }                                                         
+                                          
+  function uid() {
+    return Math.random().toString(36).substr(2,9) + Date.now().toString(36);      
+  }                                           
+                                                                                  
+  function buildTagSections() {                             
+    var groups = ['violence','psychological','emotional','social'];               
+    for (var i = 0; i < groups.length; i++) {
+      var key = groups[i];                                                        
+      var container = document.getElementById('tags-' + key);
+      container.innerHTML = '';
+      var tagList = TAG_GROUPS[key];                                              
+      for (var j = 0; j < tagList.length; j++) {
+        var tag = tagList[j];                                                     
+        var label = document.createElement('label');                              
+        label.className = 'tag-checkbox';     
+        label.setAttribute('data-tag', tag);                                      
+        var cb = document.createElement('input');           
+        cb.type = 'checkbox';                                                     
+        cb.value = tag;                   
+        cb.onchange = function() {                                                
+          var lbl = this.parentNode;                                              
+          if (this.checked) {                 
+            lbl.className = 'tag-checkbox checked';                               
+          } else {                                          
+            lbl.className = 'tag-checkbox';                                       
+          }                                   
+        };                                                                        
+        label.appendChild(cb);                              
+        label.appendChild(document.createTextNode(tag));                          
+        container.appendChild(label);
+      }                                                                           
+    }                                                       
+  }
 
-        var genres = movies.map(function(m){ return m.genre;                      
-  }).filter(Boolean).filter(function(v,i,a){ return a.indexOf(v)===i; }).sort();
-        var genreSelect = document.getElementById('filter-genre');                
-        var currentGenre = genreSelect.value;                                     
-        genreSelect.innerHTML = '<option value="all">All Genres</option>';
-        genres.forEach(function(g) {                                              
-          var opt = document.createElement('option');                             
-          opt.value = g; opt.textContent = g;
-          if (g === currentGenre) opt.selected = true;                            
-          genreSelect.appendChild(opt);                     
-        });                                                                       
-                                                                                  
-        var filtered = movies.filter(function(m) {
-          var statusOk = statusFilter === 'all' || m.status === statusFilter;     
-          var genreOk  = genreFilter  === 'all' || m.genre  === genreFilter;
-          var levelOk  = levelFilter  === 'all' || (m.disturbLevel || 0) ===      
-  parseInt(levelFilter);                      
-          return statusOk && genreOk && levelOk;                                  
-        });                                                                       
-                                                                                  
-        filtered = filtered.slice().sort(function(a, b) {                         
-          if (sortBy === 'disturb-asc')  return (a.disturbLevel || 0) -           
-  (b.disturbLevel || 0);                                    
-          if (sortBy === 'disturb-desc') return (b.disturbLevel || 0) -           
-  (a.disturbLevel || 0);
-          if (sortBy === 'rating-desc')  return (b.rating || 0) - (a.rating || 0);
-          if (sortBy === 'title-asc')    return a.title.localeCompare(b.title);
-          return new Date(b.addedAt || 0) - new Date(a.addedAt || 0);             
-        });                                                 
-                                                                                  
-        var grid = document.getElementById('movie-grid');                         
-        grid.innerHTML = '';                                                      
-        if (filtered.length === 0) {                                              
-          grid.innerHTML = '<div class="empty-state">No movies here yet. Add one  
-  above!</div>';                                            
-        } else {                          
-          filtered.forEach(function(m) { grid.appendChild(buildCard(m)); });
+  function openModal(id) {                    
+    editingId = id || null;               
+    document.getElementById('modal-title').textContent = id ? 'Edit Movie' : 'Add 
+  a Movie';                                                                       
+    document.getElementById('f-title').value = '';
+    document.getElementById('f-year').value = '';                                 
+    document.getElementById('f-genre').value = '';          
+    document.getElementById('f-rating').value = '';
+    document.getElementById('f-status').value = 'watched';                        
+    document.getElementById('f-notes').value = '';
+    var radios = document.querySelectorAll('input[name="disturb"]');              
+    for (var i = 0; i < radios.length; i++) {               
+      radios[i].checked = false;              
+    }                                                                             
+    for (var n = 1; n <= 5; n++) {
+      var lbl = document.getElementById('dlabel-' + n);                           
+      if (lbl) lbl.className = 'disturb-option';            
+    }                                                                             
+    var allCbs = document.querySelectorAll('.tag-checkbox input');
+    for (var k = 0; k < allCbs.length; k++) {                                     
+      allCbs[k].checked = false;          
+      allCbs[k].parentNode.className = 'tag-checkbox';                            
+    }                                                                             
+    if (id) {                             
+      var movie = null;                                                           
+      for (var m = 0; m < movies.length; m++) {                                   
+        if (movies[m].id === id) { movie = movies[m]; break; }
+      }                                                                           
+      if (movie) {                                          
+        document.getElementById('f-title').value = movie.title || '';             
+        document.getElementById('f-year').value = movie.year || '';
+        document.getElementById('f-genre').value = movie.genre || '';             
+        document.getElementById('f-rating').value = movie.rating || '';
+        document.getElementById('f-status').value = movie.status || 'watched';    
+        document.getElementById('f-notes').value = movie.notes || '';
+        if (movie.disturb) {                                                      
+          var r = document.querySelector('input[name="disturb"][value="' +
+  movie.disturb + '"]');                                                          
+          if (r) { r.checked = true; selectDisturb(movie.disturb); }
         }                                                                         
-                                          
-        var watched = movies.filter(function(m){ return m.status === 'Watched';   
-  });                                                                             
-        var want    = movies.filter(function(m){ return m.status === 'Want to 
-  Watch'; });                                                                     
-        var rated   = watched.filter(function(m){ return m.rating > 0; });
-        var avg     = rated.length ? (rated.reduce(function(s,m){ return s +
-  m.rating; }, 0) / rated.length).toFixed(1) : '';                                
-                                          
-        document.getElementById('stat-total').textContent   = movies.length;      
-        document.getElementById('stat-watched').textContent = watched.length;     
-        document.getElementById('stat-want').textContent    = want.length;        
-        document.getElementById('stat-avg').textContent     = avg ? avg + ' *' :  
-  '--';                                                     
+        if (movie.tags) {                                                         
+          for (var t = 0; t < movie.tags.length; t++) {
+            var cb2 = document.querySelector('.tag-checkbox input[value="' +      
+  movie.tags[t] + '"]');                                    
+            if (cb2) { cb2.checked = true; cb2.parentNode.className =             
+  'tag-checkbox checked'; }
+          }                                                                       
+        }                                                   
       }                                                                           
-                                                            
-      function buildCard(m) {                                                     
-        var card = document.createElement('div');
-        card.className = 'card';                                                  
-        var starsHtml = [1,2,3,4,5].map(function(i){ return '<span class="' + (i
-  <= m.rating ? '' : 'empty') + '">&#9733;</span>'; }).join('');                  
-        var statusClass = m.status === 'Watched' ? 'badge-watched' : 'badge-want';
-        var noteHtml   = m.note ? '<div class="card-note">' + escHtml(m.note) +
-  '</div>' : '';                                                                  
-        var genreBadge = m.genre ? '<span class="badge badge-genre">' +
-  escHtml(m.genre) + '</span>' : '';                                              
-        var disturbHtml = m.disturbLevel > 0 ? '<div class="card-disturb"><span   
-  class="disturb-skull">&#9760;</span><span class="disturb-level-label">Level ' + 
-  m.disturbLevel + ':</span><span class="disturb-level-desc-card">' +             
-  escHtml(DISTURB_LEVELS[m.disturbLevel]) + '</span></div>' : '';
-        var tags = Array.isArray(m.disturbTags) ? m.disturbTags : [];             
-        var tagsHtml = tags.length ? '<div class="card-tags">' +
-  tags.map(function(t){ return '<span class="tag-pill">' + escHtml(t) + '</span>';
-   }).join('') + '</div>' : '';                             
-        var triggeredTags = tags.filter(function(t){ return myTriggers.has(t); });
-        var triggerHtml = triggeredTags.length ? '<div                            
-  class="card-trigger-warning">&#9888; Contains your triggers: ' +
-  triggeredTags.map(escHtml).join(', ') + '</div>' : '';                          
+    }                                                       
+    document.getElementById('modal-overlay').className = 'open';
+  }                                           
+                                          
+  function closeModal() {
+    document.getElementById('modal-overlay').className = '';                      
+  }
                                                                                   
-        card.innerHTML =                                                          
-          '<div class="card-header"><div>' +                                      
-          '<div class="card-title">' + escHtml(m.title) + '</div>' +              
-          '<div class="card-year">' + (m.year || '') + '</div>' +                 
-          '</div></div>' +                
-          '<div class="card-meta">' + genreBadge + '<span class="badge ' +        
-  statusClass + '">' + escHtml(m.status) + '</span></div>' +                      
-          (m.rating > 0 ? '<div class="stars">' + starsHtml + '</div>' : '') +
-          disturbHtml + triggerHtml + tagsHtml + noteHtml +                       
-          '<div class="card-actions">' +                                          
-          '<button class="btn-sm" onclick="editMovie(\'' + m.id +
-  '\')">Edit</button>' +                                                          
-          '<button class="btn-sm danger" onclick="deleteMovie(\'' + m.id +        
-  '\')">Remove</button>' +                    
-          '</div>';                                                               
-        return card;                                        
+  function overlayClick(e) {                                
+    if (e.target === document.getElementById('modal-overlay')) closeModal();
+  }
+                                              
+  function selectDisturb(n) {             
+    for (var i = 1; i <= 5; i++) {
+      var lbl = document.getElementById('dlabel-' + i);                           
+      if (lbl) {
+        lbl.className = i === n ? 'disturb-option selected' : 'disturb-option';   
+      }                                                     
+    }
+  }                                                                               
+  
+  function saveMovie() {                                                          
+    var title = document.getElementById('f-title').value.trim();
+    if (!title) { alert('Please enter a title.'); return; }
+    var disturb = 0;                      
+    var radios = document.querySelectorAll('input[name="disturb"]');
+    for (var i = 0; i < radios.length; i++) {                                     
+      if (radios[i].checked) disturb = parseInt(radios[i].value);
+    }                                                                             
+    var tags = [];                                                                
+    var cbs = document.querySelectorAll('.tag-checkbox input:checked');
+    for (var j = 0; j < cbs.length; j++) {                                        
+      tags.push(cbs[j].value);                              
+    }                                                                             
+    var movie = {                                           
+      id: editingId || uid(),                                                     
+      title: title,
+      year: document.getElementById('f-year').value.trim(),                       
+      genre: document.getElementById('f-genre').value.trim(),
+      rating: document.getElementById('f-rating').value,
+      status: document.getElementById('f-status').value,
+      notes: document.getElementById('f-notes').value.trim(),                     
+      disturb: disturb,                       
+      tags: tags,                                                                 
+      added: editingId ? (getMovie(editingId) || {}).added || Date.now() :
+  Date.now()                                                                      
+    };                                    
+    if (editingId) {                                                              
+      for (var m = 0; m < movies.length; m++) {                                   
+        if (movies[m].id === editingId) { movies[m] = movie; break; }
       }                                                                           
+    } else {                                                
+      movies.unshift(movie);                                                      
+    }
+    saveData();                                                                   
+    closeModal();                                           
+    renderAll();
+  }                                                                               
+  
+  function getMovie(id) {                                                         
+    for (var i = 0; i < movies.length; i++) {               
+      if (movies[i].id === id) return movies[i];
+    }                                         
+    return null;                          
+  }
+                                                                                  
+  function deleteMovie(id) {
+    if (!confirm('Remove this movie?')) return;                                   
+    movies = movies.filter(function(m) { return m.id !== id; });
+    saveData();                               
+    renderAll();                          
+  }
+                                                                                  
+  function addTrigger() {
+    var val = document.getElementById('trigger-input').value.trim().toLowerCase();
+    if (!val) return;                                       
+    if (triggers.indexOf(val) === -1) {       
+      triggers.push(val);                 
+      saveData();
+      renderTriggers();                                                           
+    }
+    document.getElementById('trigger-input').value = '';                          
+  }                                                         
+                                          
+  function removeTrigger(val) {
+    triggers = triggers.filter(function(t) { return t !== val; });                
+    saveData();
+    renderTriggers();                                                             
+    renderMovies();                                         
+  }                                           
+                                          
+  function renderTriggers() {
+    var list = document.getElementById('trigger-list');                           
+    list.innerHTML = '';
+    for (var i = 0; i < triggers.length; i++) {                                   
+      var item = document.createElement('div');             
+      item.className = 'trigger-item';        
+      item.innerHTML = triggers[i] + ' <button onclick="removeTrigger(\'' +
+  triggers[i].replace(/'/g,"&#39;") + '\')">x</button>';
+      list.appendChild(item);                                                     
+    }
+  }                                                                               
                                                             
-      function escHtml(str) {                                                     
-        return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g
-  ,'&gt;').replace(/"/g,'&quot;');            
-      }                                   
-
-      function buildTagGrid() {                                                   
-        var container = document.getElementById('disturb-tag-grid');
-        container.innerHTML = '';                                                 
-        Object.keys(DISTURB_TAG_GROUPS).forEach(function(groupName) {             
-          var tags = DISTURB_TAG_GROUPS[groupName];
-          var section = document.createElement('div');                            
-          section.className = 'disturb-tag-section';        
-          var label = document.createElement('div');                              
-          label.className = 'disturb-tag-section-label';
-          label.textContent = groupName;                                          
-          section.appendChild(label);                                             
-          var grid = document.createElement('div');
-          grid.className = 'disturb-tag-grid';                                    
-          tags.forEach(function(tag) {                                            
-            var btn = document.createElement('button');
-            btn.type = 'button';                                                  
-            btn.className = 'disturb-tag-btn' + (selectedTags.has(tag) ? ' 
-  selected' : '');                            
-            btn.textContent = tag;                                                
-            btn.addEventListener('click', function() {
-              if (selectedTags.has(tag)) { selectedTags.delete(tag);              
-  btn.classList.remove('selected'); }                       
-              else { selectedTags.add(tag); btn.classList.add('selected'); }      
-              document.getElementById('input-disturb-tags').value =
-  JSON.stringify(Array.from(selectedTags));                                       
-            });                           
-            grid.appendChild(btn);                                                
-          });                                                                     
-          section.appendChild(grid);
-          container.appendChild(section);                                         
-        });                                                 
+  function getFilteredMovies() {                                                  
+    var status = document.getElementById('filter-status').value;
+    var genre = document.getElementById('filter-genre').value;
+    var disturb = document.getElementById('filter-disturb').value;
+    var search =
+  document.getElementById('filter-search').value.toLowerCase().trim();            
+    var sort = document.getElementById('sort-by').value;
+                                                                                  
+    var result = movies.filter(function(m) {                                      
+      if (status !== 'all' && m.status !== status) return false;
+      if (genre !== 'all' && m.genre !== genre) return false;                     
+      if (disturb !== 'all' && String(m.disturb) !== disturb) return false;
+      if (search) {
+        var hay = (m.title + ' ' + m.genre + ' ' + m.notes).toLowerCase();        
+        if (hay.indexOf(search) === -1) return false;
+      }                                                                           
+      return true;                                                                
+    });
+                                                                                  
+    result.sort(function(a, b) {                            
+      if (sort === 'disturb-desc') return (b.disturb || 0) - (a.disturb || 0);    
+      if (sort === 'disturb-asc') return (a.disturb || 0) - (b.disturb || 0);
+      if (sort === 'title') return (a.title || '').localeCompare(b.title || '');
+      if (sort === 'year-desc') return (b.year || 0) - (a.year || 0);
+      if (sort === 'year-asc') return (a.year || 9999) - (b.year || 9999);        
+      if (sort === 'rating-desc') return (b.rating || '').localeCompare(a.rating
+  || '');                                                                         
+      return (b.added || 0) - (a.added || 0);               
+    });                                                                           
+    return result;                                          
+  }                                                                               
+                                                                                  
+  function hasTrigger(movie) {                
+    if (!movie.tags || triggers.length === 0) return false;                       
+    for (var i = 0; i < movie.tags.length; i++) {           
+      if (triggers.indexOf(movie.tags[i]) !== -1) return true;                    
+    }                                     
+    return false;                                                                 
+  }                                                                               
+   
+  function stars(rating) {                                                        
+    if (!rating) return '';                                 
+    return rating;
+  }                                                                               
+   
+  function renderMovies() {                                                       
+    var grid = document.getElementById('movie-grid');       
+    var list = getFilteredMovies();           
+    if (list.length === 0) {              
+      grid.innerHTML = '<div id="empty-state"><h2>No movies found</h2><p>Add one 
+  or adjust your filters.</p></div>';                                             
+      return;                             
+    }                                                                             
+    grid.innerHTML = '';                                                          
+    for (var i = 0; i < list.length; i++) {   
+      var m = list[i];                                                            
+      var card = document.createElement('div');             
+      card.className = 'movie-card';                                              
+                                              
+      var disturbHTML = '';                                                       
+      if (m.disturb) {                                      
+        disturbHTML = '<div class="disturb-level-display disturb-' + m.disturb +  
+  '">' +                                      
+          'Level ' + m.disturb + ' &mdash; ' + DISTURB_LABELS[m.disturb] +        
+          '</div>';                                         
+      }                                                                           
+   
+      var tagsHTML = '';                                                          
+      if (m.tags && m.tags.length > 0) {                    
+        tagsHTML = '<div class="card-tags">';                                     
+        for (var t = 0; t < m.tags.length; t++) {           
+          tagsHTML += '<span class="tag">' + m.tags[t] + '</span>';
+        }                                     
+        tagsHTML += '</div>';                                                     
       }
                                                                                   
-      function setDisturbLevelUI(val) {       
-        selectedDisturbLevel = val;                                               
-        document.getElementById('input-disturb-level').value = val;
-        document.querySelectorAll('.disturb-level-btn').forEach(function(b) {     
-          b.classList.toggle('selected', parseInt(b.dataset.level) === val);
-        });                                                                       
-      }                                                     
+      var notesHTML = m.notes ? '<div class="card-notes">' + m.notes + '</div>' :
+  '';                                                                             
+                                                            
+      var trigHTML = '';                      
+      if (hasTrigger(m)) {                
+        trigHTML = '<div class="trigger-warning">&#9888; Contains your trigger 
+  warnings</div>';                                                                
+      }                                   
                                                                                   
-      document.getElementById('disturb-level-picker').addEventListener('click',
-  function(e) {                                                                   
-        var btn = e.target.closest('.disturb-level-btn');                         
-        if (!btn) return;                     
-        var val = parseInt(btn.dataset.level);                                    
-        setDisturbLevelUI(selectedDisturbLevel === val ? 0 : val);
-      });                                                                         
-                                          
-      function openModal(movie) {                                                 
-        document.getElementById('modal-overlay').classList.add('open');           
-        document.getElementById('modal-title').textContent = movie ? 'Edit Movie'
-  : 'Add Movie';                                                                  
-        if (movie) {                                        
-          editingId = movie.id;
-          document.getElementById('edit-id').value      = movie.id;               
-          document.getElementById('input-title').value  = movie.title;
-          document.getElementById('input-year').value   = movie.year || '';       
-          document.getElementById('input-genre').value  = movie.genre || '';
-          document.getElementById('input-status').value = movie.status;           
-          document.getElementById('input-note').value   = movie.note || '';
-          setStarUI(movie.rating || 0);                                           
-          setDisturbLevelUI(movie.disturbLevel || 0);       
-          selectedTags = new Set(Array.isArray(movie.disturbTags) ?               
-  movie.disturbTags : []);                                                        
-        } else {                          
-          editingId = null;                                                       
-          document.getElementById('movie-form').reset();                          
-          setStarUI(0);
-          setDisturbLevelUI(0);                                                   
-          selectedTags = new Set();                         
+      var statusLabel = m.status === 'watched' ? 'Watched' : m.status === 'want' ?
+   'Want to Watch' : 'Skip';              
+                                                                                  
+      card.innerHTML =                                                            
+        '<div class="card-header">' +     
+          '<div class="card-title">' + (m.title || 'Untitled') + '</div>' +       
+          (m.year ? '<div class="card-year">' + m.year + '</div>' : '') +         
+        '</div>' +                            
+        (m.genre ? '<div class="card-genre">' + m.genre + '</div>' : '') +        
+        '<div class="card-meta">' +                         
+          (m.rating ? '<span class="card-rating">' + stars(m.rating) + '</span>' :
+   '') +
+          '<span class="card-status ' + (m.status || '') + '">' + statusLabel +   
+  '</span>' +                                               
+        '</div>' +                                                                
+        disturbHTML +                                       
+        tagsHTML +                                                                
+        trigHTML +
+        notesHTML +                                                               
+        '<div class="card-actions">' +                      
+          '<button class="btn-secondary" onclick="openModal(\'' + m.id +
+  '\')">Edit</button>' +
+          '<button class="btn-danger" onclick="deleteMovie(\'' + m.id +           
+  '\')">Delete</button>' +                    
+        '</div>';                                                                 
+                                                            
+      grid.appendChild(card);                                                     
+    }
+  }                                                                               
+                                                            
+  function updateStats() {
+    var total = movies.length;
+    var watched = movies.filter(function(m) { return m.status === 'watched';
+  }).length;                                  
+    var want = movies.filter(function(m) { return m.status === 'want'; }).length;
+    var withDisturb = movies.filter(function(m) { return m.disturb > 0; });
+    var avgD = '-';                                                               
+    if (withDisturb.length > 0) {         
+      var sum = 0;                                                                
+      for (var i = 0; i < withDisturb.length; i++) sum += withDisturb[i].disturb; 
+      avgD = (sum / withDisturb.length).toFixed(1);
+    }                                                                             
+    var tagCounts = {};                                     
+    for (var j = 0; j < movies.length; j++) {                                     
+      if (movies[j].tags) {                                                       
+        for (var k = 0; k < movies[j].tags.length; k++) {
+          var tg = movies[j].tags[k];                                             
+          tagCounts[tg] = (tagCounts[tg] || 0) + 1;         
         }                                                                         
-        buildTagGrid();                                     
-        document.getElementById('input-disturb-tags').value =
-  JSON.stringify(Array.from(selectedTags));                                       
       }                                   
+    }                                                                             
+    var topTag = '-';                                                             
+    var topCount = 0;
+    for (var tag in tagCounts) {                                                  
+      if (tagCounts[tag] > topCount) { topCount = tagCounts[tag]; topTag = tag; }
+    }                                     
+    document.getElementById('stat-total').textContent = total;
+    document.getElementById('stat-watched').textContent = watched;                
+    document.getElementById('stat-want').textContent = want;
+    document.getElementById('stat-disturb').textContent = avgD;                   
+    document.getElementById('stat-tag').textContent = topTag;                     
+  }                                       
                                                                                   
-      function closeModal() {                                                     
-        document.getElementById('modal-overlay').classList.remove('open');
-        editingId = null;                                                         
-      }                                                     
-
-      document.getElementById('modal-overlay').addEventListener('click',
-  function(e) {                           
-        if (e.target === this) closeModal();
-      });                                                                         
-   
-      function setStarUI(val) {                                                   
-        selectedRating = val;                               
-        document.getElementById('input-rating').value = val;
-        document.querySelectorAll('#star-input span').forEach(function(s) {       
-          s.classList.toggle('on', parseInt(s.dataset.val) <= val);
-        });                                                                       
-      }                                                     
+  function updateGenreFilter() {                                                  
+    var genres = {};
+    for (var i = 0; i < movies.length; i++) {                                     
+      if (movies[i].genre) genres[movies[i].genre] = true;  
+    }                                     
+    var sel = document.getElementById('filter-genre');
+    var cur = sel.value;                                                          
+    sel.innerHTML = '<option value="all">All Genres</option>';
+    for (var g in genres) {                                                       
+      var opt = document.createElement('option');           
+      opt.value = g;                                                              
+      opt.textContent = g;                    
+      if (g === cur) opt.selected = true;                                         
+      sel.appendChild(opt);                                 
+    }                                                                             
+  }
                                                                                   
-      document.querySelectorAll('#star-input span').forEach(function(s) {
-        s.addEventListener('click', function() {                                  
-  setStarUI(parseInt(s.dataset.val)); });                   
-        s.addEventListener('mouseover', function() {                              
-          document.querySelectorAll('#star-input span').forEach(function(x) {
-            x.classList.toggle('on', parseInt(x.dataset.val) <=                   
-  parseInt(s.dataset.val));                                 
-          });                                                                     
-        });                                                                       
-        s.addEventListener('mouseout', function() { setStarUI(selectedRating); });
-      });                                                                         
-                                                            
-      function saveMovie(e) {
-        e.preventDefault();                                                       
-        var title        = document.getElementById('input-title').value.trim();
-        var year         = document.getElementById('input-year').value.trim();    
-        var genre        = document.getElementById('input-genre').value;
-        var rating       = parseInt(document.getElementById('input-rating').value)
-   || 0;                                                                          
-        var disturbLevel =
-  parseInt(document.getElementById('input-disturb-level').value) || 0;            
-        var disturbTags  =                                  
-  JSON.parse(document.getElementById('input-disturb-tags').value || '[]');        
-        var status       = document.getElementById('input-status').value;         
-        var note         = document.getElementById('input-note').value.trim();
-        if (!title) return;                                                       
-        if (editingId) {                                    
-          var idx = movies.findIndex(function(m){ return m.id === editingId; });  
-          if (idx > -1) movies[idx] = Object.assign({}, movies[idx], {title:title,
-   year:year, genre:genre, rating:rating, disturbLevel:disturbLevel,              
-  disturbTags:disturbTags, status:status, note:note});                            
-        } else {
-          var id = Math.random().toString(36).substr(2,9) +                       
-  Date.now().toString(36);                                  
-          movies.push({id:id, title:title, year:year, genre:genre, rating:rating, 
-  disturbLevel:disturbLevel, disturbTags:disturbTags, status:status, note:note,
-  addedAt:new Date().toISOString()});                                             
-        }
-        save(); closeModal(); render();                                           
-      }                                                     
+  function renderAll() {                                    
+    updateGenreFilter();
+    updateStats();                            
+    renderMovies();                       
+  }
                                                                                   
-      function editMovie(id) {                              
-        var movie = movies.find(function(m){ return m.id === id; });              
-        if (movie) openModal(movie);          
-      }                                                                           
-                                                            
-      function deleteMovie(id) {                                                  
-        if (!confirm('Remove this movie from your list?')) return;
-        movies = movies.filter(function(m){ return m.id !== id; });               
-        save(); render();                                   
-      }
+  document.getElementById('filter-status').onchange = renderAll;
+  document.getElementById('filter-genre').onchange = renderAll;                   
+  document.getElementById('filter-disturb').onchange = renderAll;
+  document.getElementById('sort-by').onchange = renderAll;
+  document.getElementById('filter-search').oninput = renderAll;
+  document.getElementById('trigger-input').onkeydown = function(e) {              
+    if (e.key === 'Enter') addTrigger();  
+  };                                                                              
                                                                                   
-      function toggleTriggerPanel() {         
-        var bar = document.getElementById('trigger-bar');                         
-        var btn = document.getElementById('btn-triggers');  
-        var isOpen = bar.classList.toggle('open');                                
-        btn.classList.toggle('active', isOpen);
-        if (isOpen) buildTriggerGrid();                                           
-      }                                                     
-                                                                                  
-      function buildTriggerGrid() {           
-        var container = document.getElementById('trigger-tag-grid');              
-        container.innerHTML = '';                           
-        Object.keys(DISTURB_TAG_GROUPS).forEach(function(groupName) {             
-          var tags = DISTURB_TAG_GROUPS[groupName];
-          var section = document.createElement('div');                            
-          section.className = 'disturb-tag-section';        
-          var label = document.createElement('div');
-          label.className = 'disturb-tag-section-label';                          
-          label.textContent = groupName;      
-          section.appendChild(label);                                             
-          var grid = document.createElement('div');         
-          grid.className = 'disturb-tag-grid';                                    
-          tags.forEach(function(tag) {        
-            var btn = document.createElement('button');                           
-            btn.type = 'button';                            
-            btn.className = 'disturb-tag-btn' + (myTriggers.has(tag) ? ' selected'
-   : '');                                     
-            btn.textContent = tag;                                                
-            btn.addEventListener('click', function() {      
-              if (myTriggers.has(tag)) { myTriggers.delete(tag);                  
-  btn.classList.remove('selected'); }         
-              else { myTriggers.add(tag); btn.classList.add('selected'); }        
-              saveTriggers(); render();                     
-            });                                                                   
-            grid.appendChild(btn);
-          });                                                                     
-          section.appendChild(grid);                        
-          container.appendChild(section);
-        });                                                                       
-      }
-                                                                                  
-      document.getElementById('filter-status').addEventListener('change', render);
-      document.getElementById('filter-genre').addEventListener('change', render);
-      document.getElementById('filter-level').addEventListener('change', render);
-      document.getElementById('sort-by').addEventListener('change', render);      
-   
-      render();                                                                   
-    </script>                                               
-  </body>
+  loadData();
+  buildTagSections();                                                             
+  renderTriggers();                                         
+  renderAll();                            
+  </script>
+  </body>                                                                         
   </html>
